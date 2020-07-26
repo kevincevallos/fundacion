@@ -1,0 +1,7 @@
+{
+  "name": "FundacionNuestrosJovenes",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
