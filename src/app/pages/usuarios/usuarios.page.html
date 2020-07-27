@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="medium">
     <ion-progress-bar *ngIf="cargando" type="indeterminate"></ion-progress-bar>
     <ion-title>Tabla de Usuarios</ion-title>
   </ion-toolbar>
@@ -9,18 +9,18 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col size="1">ID
+      <ion-col size="1"><b>ID</b>
       </ion-col>
-      <ion-col>Name
+      <ion-col><b>Nombre</b>
       </ion-col>
-      <ion-col>Email
+      <ion-col><b>Email</b>
       </ion-col>
-      <ion-col>Estado
+      <ion-col><b>Estado</b>
       </ion-col>
-      <ion-col>Código
+      <ion-col><b>Código</b>
       </ion-col>
     </ion-row>
-    
+
     <ion-row *ngFor="let d of datos">
       <ion-col size="1">
         <p>

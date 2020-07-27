@@ -12,6 +12,7 @@ export class DataService {
 
   async getUsuarios() {
     await this.http.get(this.urlApi + '/leerUsuarios').subscribe(x => {
+      console.log('datos_: ',x);
       for (const key in x) {
         const element = x[key];
         this.datosUsuarios.push(element);
