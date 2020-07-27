@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/services/data.service';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-usuarios',
@@ -8,20 +9,24 @@ import { DataService } from 'src/app/services/data.service';
 })
 export class UsuariosPage implements OnInit {
 
-  private datos;
-  constructor(private servicio: DataService) { }
+  datos;
+  cargando:boolean = true;
+  constructor(private servicio: DataService, private loadingController: LoadingController) { }
 
   ngOnInit() {
-    this.servicio.getUsuarios().then( res => {
-      for (let i = 0; i < 1; i++) {
-        const e = res[i];
-        
-      console.log('Resultado= '+e)
-      }
-      console.log('Imprimiendo..!!')
-      this.datos = res[0];
-      console.log(this.datos)
-      }
+    this.cargarUsuarios();
+  }
+
+
+  cargarUsuarios() {
+    this.servicio.getUsuarios().then(res => {
+      //console.log('Imprimiendo..!!')
+      this.datos = res;
+      //console.log(this.datos)
+      setTimeout(() => {
+        this.cargando = false;
+      }, 3000);
+    }
     );
   }
 

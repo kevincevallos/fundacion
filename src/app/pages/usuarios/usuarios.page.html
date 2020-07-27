@@ -1,13 +1,54 @@
 <ion-header>
   <ion-toolbar>
+    <ion-progress-bar *ngIf="cargando" type="indeterminate"></ion-progress-bar>
     <ion-title>Tabla de Usuarios</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-item *ngFor="let d of datos">
-    
-<ion-title>{{ d.id }}</ion-title>
 
-  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1">ID
+      </ion-col>
+      <ion-col>Name
+      </ion-col>
+      <ion-col>Email
+      </ion-col>
+      <ion-col>Estado
+      </ion-col>
+      <ion-col>Código
+      </ion-col>
+    </ion-row>
+    
+    <ion-row *ngFor="let d of datos">
+      <ion-col size="1">
+        <p>
+          {{ d.id }}
+        </p>
+      </ion-col>
+      <ion-col>
+        <p>
+          {{ d.name }}
+        </p>
+      </ion-col>
+
+      <ion-col>
+        <p>
+          {{ d.email }}
+        </p>
+      </ion-col>
+      <ion-col>
+        <p>
+          {{ d.estado }}
+        </p>
+      </ion-col>
+      <ion-col>
+        <p>
+          {{ d.codigo_user }}
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

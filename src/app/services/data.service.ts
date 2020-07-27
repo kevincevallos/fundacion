@@ -7,22 +7,19 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 export class DataService {
 
   private urlApi = 'https://api-gedi.herokuapp.com/server';
-  private datosUsuarios=[];
+  private datosUsuarios = [];
   constructor(private http: HttpClient) { }
 
   async getUsuarios() {
-    //return new Promise(resolve => {
-
-      await this.http.get(this.urlApi+'/leerUsuarios').subscribe(x => {
-        //console.log('Imprimiendo Data!!');
-        //console.log(x);
-        this.datosUsuarios.push(x);
-      }, err => {
-        console.log(err);
-      });
-      return this.datosUsuarios
-      //resolve = this.datosUsuarios;
-    //});
+    await this.http.get(this.urlApi + '/leerUsuarios').subscribe(x => {
+      for (const key in x) {
+        const element = x[key];
+        this.datosUsuarios.push(element);
+      }
+    }, err => {
+      console.log(err);
+    });
+    return this.datosUsuarios
   }
 
 }
