@@ -1,3 +1,25 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-router-outlet id="fnj1"></ion-router-outlet>
+
+  <ion-menu contentId="fnj1">
+    <ion-content fullscreen>
+      <ion-list id="inbox-list">
+        <ion-card>
+        <div style="text-align: center;">
+          <img src="" />
+        </div>
+          <h2 style="text-align: center;"><b><u>Fundación Nuestros Jóvenes</u></b></h2>
+        <ion-menu-toggle auto-hide="false" *ngFor="let p of navigate; let i = index">
+          <ion-item (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]" lines="none"
+            detail="false" [class.selected]="selectedIndex == i">
+            <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
+            <ion-label>{{ p.title }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        </ion-card>
+      </ion-list>
+
+    </ion-content>
+  </ion-menu>
+
 </ion-app>

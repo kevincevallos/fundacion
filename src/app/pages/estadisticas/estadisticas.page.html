@@ -1,9 +1,61 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>estadisticas</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button (click)="home()">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <div style="float: right;">
+      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+    </div>
+    <ion-title>Estadísticas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
+  <ion-segment (ionChange)="cambiarSegmento($event)">
+    <ion-segment-button value="Género">
+      <ion-label>Estadísticas según Género</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Edad">
+      <ion-label>Estadísticas según Edad</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="Especiales">
+      <ion-label>Necesidades Especiales</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="IngresosEgresos">
+      <ion-label>Ingresos y Egresos</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+  <div class="ion-padding">
 
+    <ion-card [hidden]="!genero">
+      <ion-card-content>
+        <canvas #barCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [hidden]="!edad">
+      <ion-card-content>
+        <canvas #barCanvas2></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [hidden]="!especiales">
+      <ion-card-header>
+        <ion-title><b>Total de personas con necedidades especiales: {{chombresNecEsp+cmujeresNecEsp}}</b></ion-title>
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #necEsp></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [hidden]="!ingresosEgresos">
+      <ion-card-content>
+        <canvas #lineCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
 </ion-content>

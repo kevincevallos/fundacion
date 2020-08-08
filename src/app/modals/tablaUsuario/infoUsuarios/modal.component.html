@@ -1,0 +1,53 @@
+<ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="11">
+        <h2 mat-dialog-title style="text-align: center;">Información de {{data.nombres}} {{data.apellidos}}</h2>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button style="float: right;" (click)="close()" fill="clear" color="dark">
+          <ion-icon name="close" slot="end"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<div mat-dialog-content>
+    <ul>
+      <li>
+        <span> Género: {{ data.idgenero.descripcion }}</span>
+      </li>
+      <li>
+        <span> N.Informes: {{ data.documento.length }}</span>
+      </li>
+      <li>
+        <span> Ciudad: {{ data.idciudad.ciudad }}</span>
+      </li>
+    </ul>
+    <hr color="light">
+    <h3 style="text-align: center;"><b>Estado de Salud</b></h3>
+    <ul>
+      <li *ngFor="let s of datosSalud;">
+        {{ s.condicionMedica }}
+      </li>
+      <li *ngIf="datosSalud.length <= 0">
+        <ion-text>Saludable</ion-text>
+      </li>
+    </ul>
+    <hr color="light">
+    <div *ngIf="diasDeGracia>0">
+      <b>
+        <h2 style="text-align: center;">Le quedan {{diasDeGracia}} días</h2>
+      </b>
+    </div>
+    <div *ngIf="diasDeGracia<=0">
+      <b>
+        <h2 style="color: red;text-align: center;">Ya se cumplió el plazo</h2>
+      </b>
+    </div>
+</div>
+<!-- <div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No</button>
+  <button mat-button [mat-dialog-close]="data.id" cdkFocusInitial>Yes</button>
+</div> -->

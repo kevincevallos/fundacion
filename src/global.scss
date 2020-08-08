@@ -24,3 +24,30 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+ion-title {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0 90px 1px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+#logoFNJ {
+      height: 55px;
+      content: url('src/assets/imagenesFundacion/fnjLogo.jpg');
+  }
+  .modals {
+    mat-dialog-container {
+      background-color: lightblue;
+      color: black;
+    }
+  }
+  .egreso-modal {
+    --background: lightblue !important;
+    .cancelButton {
+      color: red;
+    }
+  }

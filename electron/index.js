@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const isDevMode = require('electron-is-dev');
 const { CapacitorSplashScreen, configCapacitor } = require('@capacitor/electron');
-
+let miVentana = null
 const path = require('path');
 
 // Place holders for our windows so they don't get garbage collected.
@@ -61,11 +61,26 @@ async function createWindow () {
 
 }
 
+
+const obtenerBloqueo = app.requestSingleInstanceLock()
+
+if (!obtenerBloqueo) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Si alguien intentó ejecutar un segunda instancia, debemos
+ //enfocarnos en nuestra ventana principal.
+    if (miVentana) {
+      if (miVentana.isMinimized()) miVentana.restore()
+      miVentana.focus()
+    }
+  })
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some Electron APIs can only be used after this event occurs.
 app.on('ready', createWindow);
-
+}
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar

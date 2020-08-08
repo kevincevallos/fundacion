@@ -1,95 +1,79 @@
 <ion-header>
-  <ion-toolbar color="medium">
-    <ion-progress-bar *ngIf="cargando" type="indeterminate"></ion-progress-bar>
-    <ion-title>Tabla de Usuarios</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button (click)="home()">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <div style="float: right;">
+      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+    </div>
+    <ion-title>Tabla de Datos</ion-title>
   </ion-toolbar>
+  <ion-progress-bar *ngIf="cargando" type="indeterminate"></ion-progress-bar>
 </ion-header>
 
 <ion-content>
-
   <div class="example-container mat-elevation-z8">
-    <mat-form-field style="background-color: gray;" id="inputFilter">
-    <input  matInput (keyup)="applyFilter($event.target.value)" 
-     placeholder="Filtrar por nombres, apellidos">
-  </mat-form-field>
-  <mat-table style="background-color: gray;" [dataSource]="dataSource" matSort>
+    <mat-form-field style="background-color: lightskyblue;" id="inputFilter">
+      <input matInput (keyup)="applyFilter($event.target.value)"
+        placeholder="Filtrar por nombres, apellidos, identificación, ciudad">
+    </mat-form-field>
+    <mat-table style="background-color: lightskyblue;" [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="id">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.idusuario}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="id">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.idusuario}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="nombre">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRES </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.nombres}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="nombres">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> NOMBRES </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.nombres}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="codigo">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> APELLIDOS </mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.apellidos}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="apellidos">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> APELLIDOS </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.apellidos}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="rol">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> IDENTIFICACIÓN </mat-header-cell>
-      <mat-cell *matCellDef="let row" > {{row.identificacion}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="identificacion">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> IDENTIFICACIÓN </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.identificacion}} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="email">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> EMAIL </mat-header-cell>
-      <mat-cell *matCellDef="let row" > {{row.email}} </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="ciudad">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> CIUDAD </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.ciudad}} </mat-cell>
+      </ng-container>
 
-     <ng-container matColumnDef="admin">
-      <mat-header-cell  *matHeaderCellDef > ACCIONES </mat-header-cell>
-      <mat-cell *matCellDef="let row">
-           <button #ref (click)="openDialog('Generar', row)"
-           mat-raised-button mat-button matTooltip="Visualizar Información"
-           matTooltipPosition="below"
-           aria-label="Button that displays a tooltip when focused or hovered over">Ver</button>
-      </mat-cell>
-    </ng-container> 
+      <ng-container matColumnDef="ver">
+        <mat-header-cell id="headers" *matHeaderCellDef> VER </mat-header-cell>
+        <mat-cell id="icons" *matCellDef="let row">
+          <ion-icon style="font-size: 2em;" name="eye" (click)="verInfo(row)" mat-button
+            matTooltip="Visualizar Información" matTooltipPosition="below"></ion-icon>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="editar">
+        <mat-header-cell id="headers" *matHeaderCellDef> EDITAR </mat-header-cell>
+        <mat-cell id="icons" *matCellDef="let row">
+          <ion-icon style="font-size: 2em;" (click)="confirmarEdicion(row)" mat-button matTooltip="Editar Datos"
+            matTooltipPosition="below" name="create"></ion-icon>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="informe">
+        <mat-header-cell id="headers" *matHeaderCellDef> SUBIR INFORME </mat-header-cell>
+        <mat-cell id="icons" *matCellDef="let row">
+          <ion-icon style="font-size: 2em;" (click)="subirInforme(row)" mat-button matTooltip="Subir Informe"
+            matTooltipPosition="below" name="cloud-upload"></ion-icon>
+        </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" >
-    </mat-row>
-  </mat-table>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-</div>
-
-<!-- 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="1"><b>ID</b>
-      </ion-col>
-      <ion-col><b>Nombre</b>
-      </ion-col>
-      <ion-col><b>Email</b>
-      </ion-col>
-      <ion-col><b>Estado</b>
-      </ion-col>
-      <ion-col><b>Código</b>
-      </ion-col>
-    </ion-row>
-
-    <ion-row *ngFor="let d of datos">
-      <ion-col size="1">
-        <p>
-          {{ d.idusuario }}
-        </p>
-      </ion-col>
-      <ion-col>
-        <p>
-          {{ d.nombres }}
-        </p>
-      </ion-col>
-
-      <ion-col>
-        <p>
-          {{ d.apellidos }}
-        </p>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
- -->
+    <mat-paginator style="background-color: lightskyblue;color: black;" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
 </ion-content>

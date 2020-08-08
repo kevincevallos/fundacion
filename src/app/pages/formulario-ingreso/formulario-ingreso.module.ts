@@ -8,12 +8,14 @@ import { FormularioIngresoPageRoutingModule } from './formulario-ingreso-routing
 
 import { FormularioIngresoPage } from './formulario-ingreso.page';
 
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FormularioIngresoPageRoutingModule
+    FormularioIngresoPageRoutingModule,
+    MatTooltipModule
   ],
   declarations: [FormularioIngresoPage]
 })

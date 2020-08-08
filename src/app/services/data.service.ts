@@ -6,7 +6,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 })
 export class DataService {
   //private urlApi = 'https://api-gedi.herokuapp.com/server';
-  private url = 'http://localhost:8080/NJRest/rest/prueba';
+  private url = 'http://localhost:8080/NJRest/rest/usuario_recurso';
   private datosUsuarios = [];
   constructor(private http: HttpClient) { }
 

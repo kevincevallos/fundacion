@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="11">
+        <h2 mat-dialog-title style="text-align: center;">¿Dar de Baja a {{data.nombres}} {{data.apellidos}}?
+        </h2>
+      </ion-col>
+      <ion-col size="1">
+        <ion-button style="float: right;" (click)="close()" fill="clear" color="dark">
+          <ion-icon name="close" slot="end"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-item>
+  <ion-label position="stacked">
+    <h1><b>Observaciones:</b></h1>
+  </ion-label>
+  <ion-textarea name="observaciones" [(ngModel)]="data.observaciones" rows="3" cols="20" placeholder="Añadir observaciones de egreso..."></ion-textarea>
+</ion-item>
+
+<ion-item>
+  <ion-grid>
+    <ion-row>
+      <h2>Adjuntar informe de egreso:</h2>
+    </ion-row>
+    <ion-row>
+      <input type="file" name="upload" accept="application/pdf" (change)="cargarInforme($event)" />
+    </ion-row>
+  </ion-grid>
+</ion-item>
+
+<ion-grid>
+  <ion-row>
+    <ion-col size="8">
+      <ion-button style="width: 100%;" (click)="darDeBaja($event)">Dar de Baja</ion-button>
+    </ion-col>
+    <ion-col size="4">
+      <ion-button (click)="onNoClick()" style="width: 100%;" color="danger">Cancelar</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>

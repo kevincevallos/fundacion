@@ -1,0 +1,17 @@
+.active-item {
+    background-color: red;
+    color: lightblue
+}
+
+ion-item.selected {
+  //color: darkblue;
+    --color: var(--ion-color-primary);
+  }
+  ion-menu ion-content {
+    --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  }
+  img {
+    content: url('src/assets/imagenesFundacion/fnjLogo.jpg');
+    height: 100%; /*width of your image*/
+    //margin-left: 50%;
+  }

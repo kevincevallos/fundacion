@@ -1,9 +1,272 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>formularioIngreso</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button (click)="home()">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <div style="float: right;">
+      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+    </div>
+    <ion-title>Formulario de Ingreso</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content fullscreen>
+  <div class="registroForm">
+    <div class="col-md-4" *ngFor="let s of nuevoInforme.nuevoUsuario; let i=index">
+      <form>
+        <ion-card class="formularioRegistro">
+          <ion-card-content>
+            <ion-grid>
+              <h1><b><u>Datos Generales</u></b></h1>
+              <ion-row>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Fecha de Ingreso al Albergue:</ion-label>
+                    <ion-datetime id="clave" name="fechaIngresoFundacion" [(ngModel)]="s.fechaIngresoFundacion"
+                      displayFormat="DD MM YY" placeholder="Día/Mes/Año"></ion-datetime>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Nombres:</ion-label>
+                    <ion-input [(ngModel)]="s.nombres" name="nombres" id="clave" placeholder="Nombres completos"
+                      type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Apellidos:</ion-label>
+                    <ion-input [(ngModel)]="s.apellidos" name="apellidos" id="clave" placeholder="Apellidos completos"
+                      type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Género:</ion-label>
+                    <ion-radio-group name="genero" [(ngModel)]="s.idGenero" value="genero">
+                      <ion-item>
+                        <ion-label>Masculino</ion-label>
+                        <ion-radio slot="end" value="1"></ion-radio>
+                      </ion-item>
 
+                      <ion-item>
+                        <ion-label>Femenino</ion-label>
+                        <ion-radio slot="end" value="2"></ion-radio>
+                      </ion-item>
+
+                      <ion-item>
+                        <ion-label>LGBTI</ion-label>
+                        <ion-radio slot="end" value="3"></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Documento de Identidad:</ion-label>
+                    <ion-input [(ngModel)]="s.identificacion" name="identificacion" id="clave"
+                      placeholder="Número de Identificación" type="text" required>
+                    </ion-input>
+                    <ion-radio-group name="tipoDocumento" [(ngModel)]="s.tipoDocumento" value="genero">
+                      <ion-row>
+                        <ion-col size="3">
+                          <ion-item matTooltip="Cédula" matTooltipPosition="below">
+                            <ion-label style="font-size: 12px;">Cédula</ion-label>
+                            <ion-radio value="Cédula"></ion-radio>
+                          </ion-item>
+                        </ion-col>
+                        <ion-col size="4">
+                          <ion-item matTooltip="Pasaporte" matTooltipPosition="below">
+                            <ion-label style="font-size: 12px;">Pasaporte</ion-label>
+                            <ion-radio slot="end" value="Pasaporte"></ion-radio>
+                          </ion-item>
+                        </ion-col>
+                        <ion-col size="5">
+                          <ion-item matTooltip="Carta Andina" matTooltipPosition="below">
+                            <ion-label style="font-size: 12px;">Carta Andina</ion-label>
+                            <ion-radio slot="end" value="Carta Andina"></ion-radio>
+                          </ion-item>
+                        </ion-col>
+                      </ion-row>
+                    </ion-radio-group>
+                  </div>
+                  <div *ngIf="count>0" class="form-group">
+                    <ion-label>Parentesco Familiar:</ion-label>
+                    <ion-input [(ngModel)]="s.parentesco" name="parentesco" id="clave" placeholder="Parentesco Familiar"
+                      type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Fotografía:</ion-label>
+                    <ion-row>
+                      <img src="{{s.foto}}" id="profilePic" />
+                      <ion-input target="_blank" id="clave" [(ngModel)]="s.foto" name="foto" accept="image/*"
+                        (change)="previsualizarFoto($event,i)" type="file" required>
+                      </ion-input>
+                    </ion-row>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Nivel de Instrucción:</ion-label>
+                    <ion-input [(ngModel)]="s.nivelInstruccion" name="instruccion" id="clave"
+                      placeholder="Describa su nivel de instrucción" type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Oficio:</ion-label>
+                    <ion-input [(ngModel)]="s.oficio" name="oficio" id="clave" placeholder="Describa su oficio"
+                      type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Habilidades:</ion-label>
+                    <ion-input [(ngModel)]="s.habilidades" name="habilidades" id="clave"
+                      placeholder="Describa sus habilidades" type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Profesión:</ion-label>
+                    <ion-input [(ngModel)]="s.profesion" name="profesion" id="clave" placeholder="Describa su profesión"
+                      type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Nacionalidad:</ion-label>
+                    <ion-input [(ngModel)]="s.idNacionalidad" name="situacionMigratoria" id="clave"
+                      placeholder="AUTOCOMPLETE" type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Ciudad:</ion-label>
+                    <ion-input [(ngModel)]="s.idCiudad" name="ciudad" id="clave" placeholder="AUTOCOMPLETE" type="text"
+                      required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Estado/Provincia:</ion-label>
+                    <ion-input [(ngModel)]="s.provincia" name="provincia" id="clave"
+                      placeholder="Provincia en donde reside anteriormente" type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Fecha de Nacimiento</ion-label>
+                    <ion-datetime id="clave" name="fechaNacimiento" [(ngModel)]="s.fechaNacimiento"
+                      displayFormat="DD MM YY" placeholder="Día/Mes/Año"></ion-datetime>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div style="margin-top: 10px;" class="form-group">
+                    <h4><b>{{ s.nombres }} {{ s.apellidos }} tiene <u>25</u> años</b></h4>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Último País/Dirección de Residencia:</ion-label>
+                    <ion-input [(ngModel)]="s.idPais" name="pais" id="clave"
+                      placeholder="País/Dirección en donde reside con anterioridad" type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Fecha de Ingreso al Ecuador:</ion-label>
+                    <ion-datetime id="clave" name="fechaIngresoFundacion" [(ngModel)]="s.fechaIngresoEcuador"
+                      displayFormat="DD MM YY" placeholder="Día/Mes/Año"></ion-datetime>
+                  </div>
+                </ion-col>
+                <ion-col>
+                  <div class="form-group">
+                    <ion-label>Lugar de Ingreso:</ion-label>
+                    <ion-input [(ngModel)]="s.lugarIngreso" name="lugarIngreso" id="clave"
+                      placeholder="Lugar por donde ingresó al país" type="text" required>
+                    </ion-input>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <div class="form-group">
+                <ion-label>Situación Migratoria:</ion-label>
+                <ion-input [(ngModel)]="s.situacionMigratoria" name="situacionMigratoria" id="clave"
+                  placeholder="AUTOCOMPLETE" type="text" required>
+                </ion-input>
+              </div>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </form>
+      <ion-card class="formularioRegistro">
+        <ion-card-content>
+          <h1><b><u>Salud</u></b></h1>
+          <div id="salud" class="form-group" *ngFor="let cd of s.salud;let in=index;">
+            <div class="form-group">
+              <ion-label><b>Condición Médica Nro.{{in+1}}:</b></ion-label>
+              <ion-input [(ngModel)]="cd.condicionMedica" name="condicionMedica" id="clave"
+                placeholder="Describa su condición médica" type="text" required>
+              </ion-input>
+            </div>
+            <div class="form-group">
+              <ion-label>Imagen/Certificado Médico:</ion-label>
+
+              <ion-row>
+                <img src="{{cd.foto}}" id="profilePic" />
+                <ion-input target="_blank" id="clave" [(ngModel)]="cd.foto" id="clave" name="foto" accept="image/*"
+                  (change)="previsualizarCertificado($event,i,in)" type="file" required>
+                </ion-input>
+              </ion-row>
+            </div>
+            <ion-button color="danger" (click)="removerCondicionMedica(cd,i)">
+              Remover Condición Médica<ion-icon id="icons" name="trash"></ion-icon>
+            </ion-button>
+          </div>
+          <ion-button class="btn btn-primary" color="light" (click)="agregarCondicionMedica(s,i)">
+            +Agregar Condición Médica<ion-icon id="icons" name="medkit" color="danger"></ion-icon>
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+    <ion-button style="width: 60%;" class="btn btn-primary" color="secondary" (click)="agregarFamiliar()">
+      +Agregar Familiar<ion-icon id="icons" name="people" color="dark"></ion-icon>
+    </ion-button>
+    <ion-button [hidden]="!removerF" style="width: 39%;" class="btn btn-primary" color="danger"
+      (click)="removerFamiliar()">
+      -Remover Familiar<ion-icon id="icons" name="trash" color="light"></ion-icon>
+    </ion-button>
+    <ion-button [hidden]="editando" style="width: 100%;" color="primary" (click)="registrarUsuario()">
+      Registrar Ingreso<ion-icon id="icons" name="checkmark-circle" color="dark"></ion-icon>
+    </ion-button>
+    <ion-button [hidden]="!editando" style="width: 100%;" color="success" (click)="registrarUsuario()">
+      Guardar Datos<ion-icon id="icons" name="cloud-upload" color="dark"></ion-icon>
+    </ion-button>
+  </div>
 </ion-content>

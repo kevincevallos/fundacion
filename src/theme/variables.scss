@@ -2,6 +2,9 @@
 // http://ionicframework.com/docs/theming/
 
 /** Ionic CSS Variables **/
+$colors: (
+  headerColor: rgb(200, 227, 250)
+);
 :root {
   /** primary **/
   --ion-color-primary: #3880ff;

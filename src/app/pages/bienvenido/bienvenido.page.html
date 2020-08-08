@@ -1,9 +1,91 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>bienvenido</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <div style="float: right;">
+      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+    </div>
+    <ion-title>Bienvenido {{user}}</ion-title>
   </ion-toolbar>
 </ion-header>
+<ion-content fullscreen>
+  <div id="background">
+    <div id="espacio" *ngIf="!superadmin">
+    </div>
+    <ion-button (click)="formulario()" color="light" id="card">
+      <ion-card style="width: 100%;">
+        <ion-card-header>
+          <h2 >
+            <b>Registrar Nuevo Ingreso<ion-icon name="arrow-forward"></ion-icon></b>
+          </h2>
+        </ion-card-header>
+      </ion-card>
+    </ion-button>
 
-<ion-content>
+    <ion-button (click)="informacion()" color="light" id="card">
+      <ion-card style="width: 100%;">
+        <ion-card-header>
+          <h2>
+            <b>Gestionar Información de Albergados<ion-icon name="arrow-forward"></ion-icon></b>
+          </h2>
+        </ion-card-header>
+      </ion-card>
+    </ion-button>
 
+    <ion-button (click)="egresos()" color="light" id="card">
+      <ion-card style="width: 100%;">
+        <ion-card-header>
+          <h2>
+            <b>Registrar Egreso<ion-icon name="arrow-forward"></ion-icon></b>
+          </h2>
+        </ion-card-header>
+      </ion-card>
+    </ion-button>
+
+    <ion-button (click)="estadisticas()" color="light" id="card">
+      <ion-card style="width: 100%;">
+        <ion-card-header>
+          <h2>
+            <b>Estadísticas<ion-icon name="arrow-forward"></ion-icon></b>
+          </h2>
+        </ion-card-header>
+      </ion-card>
+    </ion-button>
+
+    <ion-button (click)="administradores()" color="light" id="cardAdmin" *ngIf="superadmin">
+      <ion-card style="width: 100%;">
+        <ion-card-header>
+          <h2>
+            <b>Gestionar Administradores del sistema<ion-icon name="arrow-forward"></ion-icon></b>
+          </h2>
+        </ion-card-header>
+      </ion-card>
+    </ion-button>
+  </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar style="font-size: 20px;text-align: center;" id="footer" color="primary">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <div style="float: left;">
+            <ion-img style="width: 45%;margin-left: 10px;" src="./assets/imagenesFundacion/sapLogo.jpg"></ion-img>
+          </div>
+        </ion-col>
+        <ion-col style="margin-top: 5px;" size="auto">
+          <ion-text>Fundación Nuestros Jóvenes <br>
+            <hr color="light">
+            CASA DE ACOGIDA TEMPORAL -
+            SAN ANTONIO DE PICHINCHA
+          </ion-text>
+        </ion-col>
+        <ion-col>
+          <div style="float: right;">
+            <ion-img style="width: 90%;" src="./assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

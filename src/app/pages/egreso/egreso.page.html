@@ -1,9 +1,66 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>egreso</ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+      <ion-button (click)="home()">
+        <ion-icon name="home"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <div style="float: right;">
+      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+    </div>
+    <ion-title>Registrar Egreso</ion-title>
   </ion-toolbar>
+  <ion-progress-bar *ngIf="cargando" type="indeterminate"></ion-progress-bar>
 </ion-header>
 
 <ion-content>
 
+  <div class="example-container mat-elevation-z8">
+    <mat-form-field style="background-color: lightskyblue;" id="inputFilter">
+      <input matInput (keyup)="applyFilter($event.target.value)"
+        placeholder="Filtrar por nombres, apellidos, identificación, ciudad">
+    </mat-form-field>
+    <mat-table style="background-color: lightskyblue;" [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.idusuario}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombres">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> NOMBRES </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.nombres}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="apellidos">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> APELLIDOS </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.apellidos}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="identificacion">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> IDENTIFICACIÓN </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.identificacion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ciudad">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> CIUDAD </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.ciudad}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="darDeBaja">
+        <mat-header-cell id="headers" *matHeaderCellDef> DAR DE BAJA </mat-header-cell>
+        <mat-cell id="icons" *matCellDef="let row">
+          <ion-icon style="font-size: 2em;" name="exit" (click)="darDeBaja(row)" mat-button
+            matTooltip="Visualizar Información" matTooltipPosition="below"></ion-icon>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator style="background-color: lightskyblue;color: black;" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
 </ion-content>

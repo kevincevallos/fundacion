@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { BienvenidoPageRoutingModule } from './bienvenido-routing.module';
 
 import { BienvenidoPage } from './bienvenido.page';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    BienvenidoPageRoutingModule
+    BienvenidoPageRoutingModule,
+    MatTooltipModule
   ],
   declarations: [BienvenidoPage]
 })
