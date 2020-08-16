@@ -4,9 +4,9 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <div style="float: right;">
-      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+      <ion-img end id="logoFNJ" src="./assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
     </div>
-    <ion-title>Bienvenido {{user}}</ion-title>
+    <ion-title>Bienvenido  {{user.idusuario.nombres }} {{ user.idusuario.apellidos }} </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content fullscreen>
@@ -16,7 +16,7 @@
     <ion-button (click)="formulario()" color="light" id="card">
       <ion-card style="width: 100%;">
         <ion-card-header>
-          <h2 >
+          <h2>
             <b>Registrar Nuevo Ingreso<ion-icon name="arrow-forward"></ion-icon></b>
           </h2>
         </ion-card-header>

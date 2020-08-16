@@ -31,8 +31,10 @@ export class EgresoPage implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.appComponent.checkRoute();
   }
+/*   ionViewWillEnter() {
+    this.appComponent.checkRoute();
+  } */
   ngOnInit() {
     this.llenarTabla();
   }

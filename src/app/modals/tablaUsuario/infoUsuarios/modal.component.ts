@@ -23,6 +23,7 @@ export class ModalComponent implements OnInit {
   }
   ngOnInit() {
     this.datosSalud = this.data.salud;
+    console.log('data_: ',this.data);
     this.fIngreso = new Date(this.data.fechaIngresoFundacion);
     this.f1.getDate();
     var fechaActual = new Date(this.datepipe.transform(this.f1, 'yyyy-MM-dd'));

@@ -5,7 +5,7 @@
     background-color: aliceblue;
 }
 #profilePic {
-    height: 150px;
+    height: 160px;
 }
 #salud {
     border-style: inset;
@@ -17,4 +17,9 @@
 }
 #icons {
     font-size: 15px;
+}
+.btn {
+    .btn-danger{
+        color: red;
+    }
 }

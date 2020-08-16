@@ -8,17 +8,32 @@ import { AppComponent } from 'src/app/app.component';
   styleUrls: ['./bienvenido.page.scss'],
 })
 export class BienvenidoPage implements OnInit {
-  user = 'Luis Gutierrez';
+  user;
   superadmin: boolean;
   constructor(private router: Router, private appComponent: AppComponent) { }
 
-  ngAfterViewInit() {
+/*   ionViewWillEnter() {
     this.appComponent.checkRoute();
-  }
+  } */
   ngOnInit() {
-    this.superadmin = false;
-    if (this.user == 'Luis Gutierrez') {
-      this.superadmin = true;
+
+    let x = localStorage.getItem('usuarioLogueado');
+    this.user = JSON.parse(x);
+    for (const key in this.user) {
+      if (Object.prototype.hasOwnProperty.call(this.user, key)) {
+        const idusuario = this.user[key].idusuario;
+        const idperfil = this.user[key].idperfil;
+        if (idperfil == 1) {
+          this.superadmin = true;
+        }
+        if (idperfil == 2) {
+          this.superadmin = false;
+        }
+        if (idusuario) {
+          let y = JSON.stringify(idusuario);
+          localStorage.setItem('idusuario', y);
+        }
+      }
     }
   }
   formulario() {

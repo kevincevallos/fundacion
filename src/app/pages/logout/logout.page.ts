@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 
 @Component({
   selector: 'app-logout',
@@ -9,7 +10,8 @@ import { Router } from '@angular/router';
 })
 export class LogoutPage implements OnInit {
 
-  constructor(private alertCtrl: AlertController, private router: Router) { }
+  constructor(private alertCtrl: AlertController, private router: Router,
+    private appComponent: AppComponent) { }
 
   ngOnInit() {
   }
@@ -29,6 +31,8 @@ export class LogoutPage implements OnInit {
         {
           text: 'Cerrar Sesión',
           handler: () => {
+            localStorage.removeItem('usuarioLogueado');
+            localStorage.removeItem('idusuario');
             this.router.navigate(['login']);
           }
         }
@@ -39,4 +43,7 @@ export class LogoutPage implements OnInit {
   home() {
     this.router.navigate(['bienvenido']);
   }
+/*   ionViewWillEnter() {
+    this.appComponent.checkRoute();
+  } */
 }

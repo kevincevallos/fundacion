@@ -7,7 +7,7 @@
       </ion-button>
     </ion-buttons>
     <div style="float: right;">
-      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+      <ion-img end id="logoFNJ" src="./assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
     </div>
     <ion-title>Formulario de Ingreso</ion-title>
   </ion-toolbar>
@@ -25,15 +25,16 @@
                 <ion-col>
                   <div class="form-group">
                     <ion-label>Fecha de Ingreso al Albergue:</ion-label>
-                    <ion-datetime id="clave" name="fechaIngresoFundacion" [(ngModel)]="s.fechaIngresoFundacion"
-                      displayFormat="DD MM YY" placeholder="Día/Mes/Año"></ion-datetime>
+                    <ion-datetime id="clave" name="fechaIngresoFundacion" [value]="s.fechaIngresoFundacion"
+                      display-timezone="utc" (ionChange)="selectFechaIngresoFundacion($event.target.value, i)"
+                      placeholder="Selecciona la fecha"></ion-datetime>
                   </div>
                 </ion-col>
                 <ion-col>
                   <div class="form-group">
                     <ion-label>Nombres:</ion-label>
-                    <ion-input [(ngModel)]="s.nombres" name="nombres" id="clave" placeholder="Nombres completos"
-                      type="text" required>
+                    <ion-input [(ngModel)]="s.nombres" (ngModelChange)="capitalize($event)" name="nombres" id="clave"
+                      placeholder="Nombres completos" type="text" required>
                     </ion-input>
                   </div>
                 </ion-col>
@@ -49,49 +50,55 @@
               <ion-row>
                 <ion-col>
                   <div class="form-group">
-                    <ion-label>Género:</ion-label>
-                    <ion-radio-group name="genero" [(ngModel)]="s.idGenero" value="genero">
-                      <ion-item>
-                        <ion-label>Masculino</ion-label>
-                        <ion-radio slot="end" value="1"></ion-radio>
-                      </ion-item>
 
-                      <ion-item>
-                        <ion-label>Femenino</ion-label>
-                        <ion-radio slot="end" value="2"></ion-radio>
-                      </ion-item>
+                    <ion-label>Teléfono:</ion-label>
+                    <ion-input [(ngModel)]="s.telefono" name="telefono" id="clave" placeholder="Teléfono del albergado"
+                      type="number" required>
+                    </ion-input>
 
-                      <ion-item>
-                        <ion-label>LGBTI</ion-label>
-                        <ion-radio slot="end" value="3"></ion-radio>
-                      </ion-item>
-                    </ion-radio-group>
+                    <ion-label>Teléfono Contacto:</ion-label>
+                    <ion-input [(ngModel)]="s.telefonoContacto" name="telefonoContacto" id="clave"
+                      placeholder="Teléfono de contacto" type="number" required>
+                    </ion-input>
+                    <br>
+                    <ion-item style="height: 40px;">
+                      <ion-label style="margin-top: 0px;">Género:</ion-label>
+                      <ion-select [(ngModel)]="s.idgenero" name="genero">
+                        <ion-select-option value="1">Masculino</ion-select-option>
+                        <ion-select-option value="2">Femenino</ion-select-option>
+                        <ion-select-option value="3">Lgbti</ion-select-option>
+                      </ion-select>
+                    </ion-item>
                   </div>
                 </ion-col>
                 <ion-col>
                   <div class="form-group">
-                    <ion-label>Documento de Identidad:</ion-label>
-                    <ion-input [(ngModel)]="s.identificacion" name="identificacion" id="clave"
-                      placeholder="Número de Identificación" type="text" required>
+                    <ion-label>Documento de Identidad:</ion-label><br>
+                    <ion-text *ngIf="existeActivo" style="color: red;">Albergado consta en el sistema</ion-text>
+                    <ion-text *ngIf="existePasivo" style="color: red;">Albergado consta en el sistema
+                      <ion-button fill="clear" (click)="activarPasivo(s.identificacion)"><a>Activar?</a></ion-button>
+                    </ion-text>
+                    <ion-input [(ngModel)]="s.identificacion" (ionChange)="comprobarCedulaExistente($event)"
+                      name="identificacion" id="clave" placeholder="Número de Identificación" required>
                     </ion-input>
-                    <ion-radio-group name="tipoDocumento" [(ngModel)]="s.tipoDocumento" value="genero">
+                    <ion-radio-group name="tipoDocumento" [(ngModel)]="s.tipoIdentificacion" value="genero">
                       <ion-row>
                         <ion-col size="3">
                           <ion-item matTooltip="Cédula" matTooltipPosition="below">
                             <ion-label style="font-size: 12px;">Cédula</ion-label>
-                            <ion-radio value="Cédula"></ion-radio>
+                            <ion-radio value="0"></ion-radio>
                           </ion-item>
                         </ion-col>
                         <ion-col size="4">
                           <ion-item matTooltip="Pasaporte" matTooltipPosition="below">
                             <ion-label style="font-size: 12px;">Pasaporte</ion-label>
-                            <ion-radio slot="end" value="Pasaporte"></ion-radio>
+                            <ion-radio slot="end" value="1"></ion-radio>
                           </ion-item>
                         </ion-col>
                         <ion-col size="5">
                           <ion-item matTooltip="Carta Andina" matTooltipPosition="below">
                             <ion-label style="font-size: 12px;">Carta Andina</ion-label>
-                            <ion-radio slot="end" value="Carta Andina"></ion-radio>
+                            <ion-radio slot="end" value="2"></ion-radio>
                           </ion-item>
                         </ion-col>
                       </ion-row>
@@ -99,9 +106,12 @@
                   </div>
                   <div *ngIf="count>0" class="form-group">
                     <ion-label>Parentesco Familiar:</ion-label>
-                    <ion-input [(ngModel)]="s.parentesco" name="parentesco" id="clave" placeholder="Parentesco Familiar"
-                      type="text" required>
-                    </ion-input>
+                    <ng-autocomplete [data]="listaParentescos" [searchKeyword]="keywordParentesco"
+                      (selected)='selectParentesco($event,i)' [itemTemplate]="itemTemplate6">
+                    </ng-autocomplete>
+                    <ng-template #itemTemplate6 let-item>
+                      <a [innerHTML]="item.parentesco"></a>
+                    </ng-template>
                   </div>
                 </ion-col>
                 <ion-col>
@@ -152,20 +162,23 @@
                   </div>
                 </ion-col>
                 <ion-col>
-                  <div class="form-group">
-                    <ion-label>Nacionalidad:</ion-label>
-                    <ion-input [(ngModel)]="s.idNacionalidad" name="situacionMigratoria" id="clave"
-                      placeholder="AUTOCOMPLETE" type="text" required>
-                    </ion-input>
-                  </div>
+                  <ion-label>Nacionalidad:</ion-label>
+                  <ng-autocomplete [data]="listaNacionalidades" [searchKeyword]="keywordNacionalidad"
+                    (selected)='selectNacionalidad($event,i)' #nacionalidad [itemTemplate]="itemTemplate">
+                  </ng-autocomplete>
+                  <ng-template #itemTemplate let-item>
+                    <a [innerHTML]="item.gentilicio"></a>
+                  </ng-template>
                 </ion-col>
                 <ion-col>
-                  <div class="form-group">
-                    <ion-label>Ciudad:</ion-label>
-                    <ion-input [(ngModel)]="s.idCiudad" name="ciudad" id="clave" placeholder="AUTOCOMPLETE" type="text"
-                      required>
-                    </ion-input>
-                  </div>
+                  <ion-label>Ciudad:</ion-label>
+                  <ng-autocomplete [data]="listaCiudades" [searchKeyword]="keywordCiudad" #ciudad
+                    (selected)='selectCiudad($event,i)' (change)="agregarNuevaCiudad($event, i)"
+                    [itemTemplate]="itemTemplate7">
+                  </ng-autocomplete>
+                  <ng-template #itemTemplate7 let-item>
+                    <a [innerHTML]="item.ciudad"></a>
+                  </ng-template>
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -180,8 +193,9 @@
                 <ion-col>
                   <div class="form-group">
                     <ion-label>Fecha de Nacimiento</ion-label>
-                    <ion-datetime id="clave" name="fechaNacimiento" [(ngModel)]="s.fechaNacimiento"
-                      displayFormat="DD MM YY" placeholder="Día/Mes/Año"></ion-datetime>
+                    <ion-datetime id="clave" name="fechaNacimiento" [value]="s.fechaNacimiento" display-timezone="utc"
+                      (ionChange)="selectFechaNacimiento($event.target.value, i)" placeholder="Selecciona la fecha">
+                    </ion-datetime>
                   </div>
                 </ion-col>
                 <ion-col>
@@ -192,35 +206,44 @@
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <div class="form-group">
-                    <ion-label>Último País/Dirección de Residencia:</ion-label>
-                    <ion-input [(ngModel)]="s.idPais" name="pais" id="clave"
-                      placeholder="País/Dirección en donde reside con anterioridad" type="text" required>
-                    </ion-input>
-                  </div>
+                  <ion-label>Último País de Residencia:</ion-label>
+                  <ng-autocomplete [data]="listaPaises" [searchKeyword]="keywordPais" (selected)='selectPais($event,i)'
+                    #pais [historyListMaxNumber]="2" [itemTemplate]="itemTemplate3">
+                  </ng-autocomplete>
+                  <ng-template #itemTemplate3 let-item>
+                    <a [innerHTML]="item.pais"></a>
+                  </ng-template>
                 </ion-col>
                 <ion-col>
                   <div class="form-group">
                     <ion-label>Fecha de Ingreso al Ecuador:</ion-label>
-                    <ion-datetime id="clave" name="fechaIngresoFundacion" [(ngModel)]="s.fechaIngresoEcuador"
-                      displayFormat="DD MM YY" placeholder="Día/Mes/Año"></ion-datetime>
+                    <ion-datetime id="clave" name="fechaIngresoFundacion" [value]="s.fechaIngresoEcuador"
+                      display-timezone="utc" (ionChange)="selectFechaIngresoEcuador($event.target.value, i)"
+                      placeholder="Selecciona la fecha"></ion-datetime>
                   </div>
                 </ion-col>
                 <ion-col>
-                  <div class="form-group">
-                    <ion-label>Lugar de Ingreso:</ion-label>
-                    <ion-input [(ngModel)]="s.lugarIngreso" name="lugarIngreso" id="clave"
-                      placeholder="Lugar por donde ingresó al país" type="text" required>
-                    </ion-input>
-                  </div>
+                  <ion-label>Lugar de Ingreso:</ion-label>
+                  <ng-autocomplete [data]="listaLugarIngreso" [searchKeyword]="keywordLugarIngreso"
+                    (selected)='selectLugarIngreso($event, i)' (change)="agregarNuevoLugarIngreso($event,i)"
+                    #lugarIngreso [itemTemplate]="itemTemplate4">
+                  </ng-autocomplete>
+                  <ng-template #itemTemplate4 let-item>
+                    <a [innerHTML]="item.nombre"></a>
+                  </ng-template>
                 </ion-col>
               </ion-row>
-              <div class="form-group">
-                <ion-label>Situación Migratoria:</ion-label>
-                <ion-input [(ngModel)]="s.situacionMigratoria" name="situacionMigratoria" id="clave"
-                  placeholder="AUTOCOMPLETE" type="text" required>
-                </ion-input>
-              </div>
+              <ion-label>Situación Migratoria:</ion-label>
+              <ng-autocomplete [data]="listaSituacionMigratoria" [searchKeyword]="keywordSituacionMigratoria"
+                (selected)='selectSituacionMigratoria($event,i)' #situacionMigratoria [itemTemplate]="itemTemplate5">
+              </ng-autocomplete>
+              <ng-template #itemTemplate5 let-item>
+                <a [innerHTML]="item.tipo"></a>
+              </ng-template>
+              <ion-label>Observaciones de Ingreso:</ion-label>
+              <ion-input [(ngModel)]="s.observacionIngreso" name="observacionIngreso" id="clave"
+                placeholder="Agregar observaciones de ingreso" type="text">
+              </ion-input>
             </ion-grid>
           </ion-card-content>
         </ion-card>
@@ -230,14 +253,27 @@
           <h1><b><u>Salud</u></b></h1>
           <div id="salud" class="form-group" *ngFor="let cd of s.salud;let in=index;">
             <div class="form-group">
-              <ion-label><b>Condición Médica Nro.{{in+1}}:</b></ion-label>
-              <ion-input [(ngModel)]="cd.condicionMedica" name="condicionMedica" id="clave"
-                placeholder="Describa su condición médica" type="text" required>
-              </ion-input>
+              <ion-row>
+                <ion-col>
+                  <ion-label><b>Condición Médica Nro.{{in+1}}:</b></ion-label>
+                  <ion-input [(ngModel)]="cd.condicionMedica" name="condicionMedica" id="clave"
+                    placeholder="Describa su condición médica" type="text" required>
+                  </ion-input>
+                </ion-col>
+                <ion-col>
+                  <ion-label>Estado de Discapacidad:</ion-label>
+                  <ion-item>
+                    <ion-label>Selecciona un estado:</ion-label>
+                    <ion-select [(ngModel)]="cd.estadoDiscapacidad" name="estadoDiscapacidad">
+                      <ion-select-option [value]="e.id" *ngFor="let e of estadoDiscapacidad">{{ e.estado }}
+                      </ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
             </div>
             <div class="form-group">
-              <ion-label>Imagen/Certificado Médico:</ion-label>
-
+              <ion-label>Certificado Médico:</ion-label>
               <ion-row>
                 <img src="{{cd.foto}}" id="profilePic" />
                 <ion-input target="_blank" id="clave" [(ngModel)]="cd.foto" id="clave" name="foto" accept="image/*"
@@ -245,7 +281,7 @@
                 </ion-input>
               </ion-row>
             </div>
-            <ion-button color="danger" (click)="removerCondicionMedica(cd,i)">
+            <ion-button color="danger" (click)="removerCondicionMedica(cd,i,in)">
               Remover Condición Médica<ion-icon id="icons" name="trash"></ion-icon>
             </ion-button>
           </div>
@@ -262,11 +298,18 @@
       (click)="removerFamiliar()">
       -Remover Familiar<ion-icon id="icons" name="trash" color="light"></ion-icon>
     </ion-button>
-    <ion-button [hidden]="editando" style="width: 100%;" color="primary" (click)="registrarUsuario()">
-      Registrar Ingreso<ion-icon id="icons" name="checkmark-circle" color="dark"></ion-icon>
+    <ion-button [disabled]="existeActivo || existePasivo" [hidden]="editando" style="width: 100%;" color="primary"
+      (click)="registrarUsuario()">
+      <ion-spinner *ngIf="cargando" name="dots"></ion-spinner>
+      <div *ngIf="!cargando">Registrar Ingreso
+        <ion-icon id="icons" name="checkmark-circle" color="dark"></ion-icon>
+      </div>
     </ion-button>
-    <ion-button [hidden]="!editando" style="width: 100%;" color="success" (click)="registrarUsuario()">
-      Guardar Datos<ion-icon id="icons" name="cloud-upload" color="dark"></ion-icon>
+    <ion-button [hidden]="!editando" style="width: 100%;" color="success" (click)="editarUsuario()">
+      <ion-spinner *ngIf="cargando" name="dots"></ion-spinner>
+      <div *ngIf="!cargando"> Guardar Datos
+        <ion-icon id="icons" name="cloud-upload" color="dark"></ion-icon>
+      </div>
     </ion-button>
   </div>
 </ion-content>

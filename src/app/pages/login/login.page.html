@@ -1,9 +1,66 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content fullscreen>
+  <ion-slides id="slidesLogin" class="swiper-no-swiping" pager="false" [options]="slideOptsFade">
+    <ion-slide>
+      <ion-img src="./assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+    </ion-slide>
+    <ion-slide>
+      <ion-img src="./assets/imagenesFundacion/sapLogo.jpg"></ion-img>
+    </ion-slide>
+  </ion-slides>
 
-<ion-content>
 
+  <ion-card class="loginCard">
+    <ion-slides class="swiper-no-swiping" #slides [options]="slideOptsCube">
+      <ion-slide style="background-color: white;">
+        <form (ngSubmit)="iniciarSesion()">
+          <ion-card-header>
+            <h1>Iniciar Sesión</h1>
+          </ion-card-header>
+          <ion-item lines="full">
+            <ion-input type="text" name="nombre" [(ngModel)]="usuario.nombre" placeholder="Nombre de Perfil"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <ion-item lines="full">
+            <ion-input type="password" name="contrasena" [(ngModel)]="usuario.contrasena" placeholder="Contraseña"
+              required></ion-input>
+          </ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-button type=submit color="primary" shape="round" expand="block">
+                <ion-spinner *ngIf="cargando" name="dots"></ion-spinner>
+                <div *ngIf="!cargando">Iniciar Sesión</div>
+              </ion-button>
+              <p>
+                <ion-button color="secondary" (click)="next(slides)" fill="clear"><b><u>Olvidé mi contraseña</u></b>
+                </ion-button>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-col></ion-col>
+        </form>
+      </ion-slide>
+      <ion-slide style="background-color: white;">
+        <form (ngSubmit)="recuperarContrasena()">
+          <ion-card-header>
+            <h1>Recuperar Contraseña</h1>
+          </ion-card-header>
+          <ion-item lines="full">
+            <ion-input type="text" name="correo" [(ngModel)]="usuario.correo" placeholder="Correo electrónico"
+              required></ion-input>
+          </ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-button type=submit color="primary" shape="round" expand="block">Recuperar
+              </ion-button>
+              <p>
+                <ion-button color="secondary" (click)="prev(slides)" fill="clear"><u>Iniciar sesión</u></ion-button>
+              </p>
+            </ion-col>
+          </ion-row>
+        </form>
+      </ion-slide>
+    </ion-slides>
+  </ion-card>
 </ion-content>

@@ -25,7 +25,7 @@ export class UsuariosPage implements OnInit {
   editandoUsuario;
   datosSalud;
   cargando: boolean = true;
-  displayedColumns = ['id', 'nombres', 'apellidos', 'identificacion', 'ciudad', 'ver', 'editar', 'informe'];
+  displayedColumns = ['nombres', 'apellidos', 'identificacion', 'ciudad', 'telefono', 'ver', 'editar', 'informe'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -39,11 +39,15 @@ export class UsuariosPage implements OnInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.appComponent.checkRoute();
   }
-  ngOnInit() {
+  /*   ionViewWillEnter() {
+      this.appComponent.checkRoute();
+    } */
+  ionViewWillEnter() {
     this.llenarTabla();
     this.editandoUsuario = new InformeIngreso();
+  }
+  ngOnInit() {
   }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
@@ -88,11 +92,11 @@ export class UsuariosPage implements OnInit {
     });
   }
   async confirmarEdicion(obj) {
-
+    console.log('objeto_: ', obj);
     let alert = this.alertCtrl.create({
       header: '¿Editar datos de ' + obj.nombres + '?',
       message: 'Se te redigirá al formulario de datos',
-      cssClass:'egreso-modal',
+      cssClass: 'egreso-modal',
       buttons: [
         {
           text: 'Cancelar',
@@ -104,16 +108,40 @@ export class UsuariosPage implements OnInit {
           handler: () => {
             //this.editandoUsuario.nuevoUsuario.push(obj);
             this.editandoUsuario.nuevoUsuario[0].salud = [];
+            var image64;
             for (let i = 0; i < this.editandoUsuario.nuevoUsuario.length; i++) {
               this.editandoUsuario.nuevoUsuario[i].idusuario = obj.idusuario;
               this.editandoUsuario.nuevoUsuario[i].nombres = obj.nombres;
               this.editandoUsuario.nuevoUsuario[i].apellidos = obj.apellidos;
+              this.editandoUsuario.nuevoUsuario[i].telefono = obj.telefono;
+              this.editandoUsuario.nuevoUsuario[i].telefonoContacto = obj.telefonoContacto;
+              this.editandoUsuario.nuevoUsuario[i].tipoIdentificacion = obj.tipoIdentificacion.toString();
               this.editandoUsuario.nuevoUsuario[i].identificacion = obj.identificacion;
+              this.editandoUsuario.nuevoUsuario[i].idnacionalidad = obj.idnacionalidad;
+              this.editandoUsuario.nuevoUsuario[i].idpais = obj.idpais;
+              this.editandoUsuario.nuevoUsuario[i].idciudad = obj.idciudad;
+              this.editandoUsuario.nuevoUsuario[i].idlugarIngreso = obj.idlugarIngreso;
+              this.editandoUsuario.nuevoUsuario[i].situacionMigratoria = obj.situacionMigratoria;
+              this.editandoUsuario.nuevoUsuario[i].nivelInstruccion = obj.nivelInstruccion;
+              this.editandoUsuario.nuevoUsuario[i].oficio = obj.oficio;
+              this.editandoUsuario.nuevoUsuario[i].habilidades = obj.habilidades;
+              this.editandoUsuario.nuevoUsuario[i].profesion = obj.profesion;
+              this.editandoUsuario.nuevoUsuario[i].provincia = obj.provincia;
+              this.editandoUsuario.nuevoUsuario[i].observacionIngreso = obj.observacionIngreso;
+              this.editandoUsuario.nuevoUsuario[i].situacionMigratoria = obj.situacionMigratoria;
+              //image64 = new String(obj.foto);
+              //console.log('image_: ', image64);
+              //var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(image64)));
+              this.editandoUsuario.nuevoUsuario[i].foto = 'data:image/png;base64,'+obj.foto;
+              //console.log('base64String', this.editandoUsuario.nuevoUsuario[i].foto);
               var genero = obj.idgenero.idgenero;
-              this.editandoUsuario.nuevoUsuario[i].idGenero = genero.toString();
-              var fIngreso = new Date(obj.fechaIngresoFundacion);
-              this.editandoUsuario.nuevoUsuario[i].fechaIngresoFundacion = fIngreso;
-              this.editandoUsuario.nuevoUsuario[i].idCiudad = obj.idciudad.idciudad;
+              this.editandoUsuario.nuevoUsuario[i].idgenero = genero.toString();
+              var fIngresoFun = new Date(obj.fechaIngresoFundacion);
+              this.editandoUsuario.nuevoUsuario[i].fechaIngresoFundacion = fIngresoFun;
+              var fIngresoEcu = new Date(obj.fechaIngresoEcuador);
+              this.editandoUsuario.nuevoUsuario[i].fechaIngresoEcuador = fIngresoEcu;
+              var fNac = new Date(obj.fechaNacimiento);
+              this.editandoUsuario.nuevoUsuario[i].fechaNacimiento = fNac;
             }
             for (let s = 0; s < obj.salud.length; s++) {
               this.editandoUsuario.nuevoUsuario[0].salud.push(obj.salud[s]);
@@ -127,6 +155,7 @@ export class UsuariosPage implements OnInit {
     });
     (await alert).present();
   }
+
   home() {
     this.router.navigate(['bienvenido']);
   }

@@ -11,9 +11,9 @@ export class GestionAdminPage implements OnInit {
 
   constructor(private appComponent: AppComponent,private router: Router) { }
 
-  ngAfterViewInit() {
+  /* ionViewWillEnter() {
     this.appComponent.checkRoute();
-  }
+  } */
   ngOnInit() {
   }
   home() {

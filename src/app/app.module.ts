@@ -15,8 +15,10 @@ import { DatePipe } from '@angular/common';
 import { ModalComponent } from './modals/tablaUsuario/infoUsuarios/modal.component';
 import { ModalInformeComponent } from './modals/tablaUsuario/subirInforme/modal-informe.component';
 import { ModalEgresoComponent } from './modals/registrarEgreso/darDeBaja/modal-egreso.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule, MatInput } from '@angular/material/input';
 
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
 @NgModule({
   declarations: [AppComponent, ModalComponent, ModalInformeComponent, ModalEgresoComponent],
   entryComponents: [ModalComponent, ModalInformeComponent, ModalEgresoComponent],
@@ -26,6 +28,8 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule, NgxElectronModule,
     HttpClientModule,
     FormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
     BrowserAnimationsModule
   ],
   providers: [

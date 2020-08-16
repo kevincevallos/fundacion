@@ -71,8 +71,10 @@ export class EstadisticasPage implements OnInit {
   cmujeresNecEsp: number = 9;
   constructor(private appComponent: AppComponent, private router: Router) { }
 
-  ngAfterViewInit() {
+/*   ionViewWillEnter() {
     this.appComponent.checkRoute();
+  } */
+  ngAfterViewInit() {
     //Según Género
     this.barChart = new Chart(this.barCanvas.nativeElement, {
       type: "bar",

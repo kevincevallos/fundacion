@@ -1,13 +1,17 @@
 import { Salud } from './salud.model';
 
 export class NuevoUsuario {
+  nuevoUsuario;
   idusuario: number;
-  parentesco: string;
+  idRegistrador: number;
+  idParentesco: number;
   nombres: string;
   apellidos: string;
+  telefono: string;
+  telefonoContacto: string;
   fechaNacimiento: string;
   identificacion: string;
-  tipoDocumento: string;
+  tipoIdentificacion: number;
   oficio: string;
   profesion: string;
   habilidades: string;
@@ -18,10 +22,11 @@ export class NuevoUsuario {
   fechaEgresoFundacion: string;
   provincia: string;
   situacionMigratoria: string;
-  idGenero: number;
-  idCiudad: number;
-  idPais: number;
+  idgenero: number;
+  idciudad: string;
+  idpais: number;
   lugarIngreso: string;
-  idNacionalidad: number;
+  idnacionalidad: number;
   salud: Salud[] = [];
+  observacionIngreso: string;
 }

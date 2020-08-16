@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DatePipe } from '@angular/common';
 import { Usuario } from 'src/app/models/usuario.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal',
@@ -9,7 +10,12 @@ import { Usuario } from 'src/app/models/usuario.model';
   styleUrls: ['./modal-informe.component.css']
 })
 export class ModalInformeComponent implements OnInit {
-
+  objeto = {
+    idUsuario:0,
+    observacion:'',
+    documento:'',
+    estado:false
+  }
   datosSalud;
   informe;
   f1 = new Date();
@@ -23,6 +29,8 @@ export class ModalInformeComponent implements OnInit {
     this.dialogRef.close();
   }
   ngOnInit() {
+    console.log(this.data);
+    this.objeto.idUsuario = this.data.idusuario;
     this.datosSalud = this.data.salud;
     this.fIngreso = new Date(this.data.fechaIngresoFundacion);
     this.f1.getDate();
@@ -43,9 +51,21 @@ export class ModalInformeComponent implements OnInit {
     reader.readAsDataURL($event.target.files[0]);
   }
   subirInforme($event): void {
-    console.log('Informe Subido!!', $event);
+    this.objeto.documento = this.informe;
+    console.log('Informe Subido!!', this.objeto);
+    this.successAlert();
+    this.close();
   }
   close() {
     this.onNoClick();
+  }
+  successAlert() {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Listo!',
+      text: 'Informe Subido con Éxito',
+      showConfirmButton: false,
+      timer: 3500
+    })
   }
 }

@@ -7,7 +7,7 @@
       </ion-button>
     </ion-buttons>
     <div style="float: right;">
-      <ion-img end id="logoFNJ" src="src/assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+      <ion-img end id="logoFNJ" src="./assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
     </div>
     <ion-title>Tabla de Datos</ion-title>
   </ion-toolbar>
@@ -21,11 +21,6 @@
         placeholder="Filtrar por nombres, apellidos, identificación, ciudad">
     </mat-form-field>
     <mat-table style="background-color: lightskyblue;" [dataSource]="dataSource" matSort>
-
-      <ng-container matColumnDef="id">
-        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
-        <mat-cell id="headers" *matCellDef="let row"> {{row.idusuario}} </mat-cell>
-      </ng-container>
 
       <ng-container matColumnDef="nombres">
         <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> NOMBRES </mat-header-cell>
@@ -45,6 +40,11 @@
       <ng-container matColumnDef="ciudad">
         <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> CIUDAD </mat-header-cell>
         <mat-cell id="headers" *matCellDef="let row"> {{row.ciudad}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="telefono">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> TELÉFONO </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.telefono}} </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="ver">
