@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { NuevoUsuario } from 'src/app/models/nuevoUsuario.model';
 import { InformeIngreso } from 'src/app/models/informeIngreso.model';
 import { AlertController, ToastController, IonContent } from '@ionic/angular';
@@ -18,7 +18,6 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs
   styleUrls: ['./formulario-ingreso.page.scss'],
 })
 export class FormularioIngresoPage implements OnInit {
-
   count: number;
   editandoUsuario: NuevoUsuario;
   editando: boolean;
@@ -37,23 +36,31 @@ export class FormularioIngresoPage implements OnInit {
     { tipo: 'Irregular' },
     { tipo: 'Otra Visa' }
   ];
+  listaCondicionMedica = [
+    { condicion: 'Gripe' },
+    { condicion: 'Fiebre' },
+    { condicion: 'Tos' },
+    { condicion: 'Discapacidad Visual 10%' }
+  ];
   keywordNacionalidad: string = 'gentilicio';
   keywordCiudad = "ciudad";
   keywordPais = "pais";
   keywordLugarIngreso = "nombre";
   keywordSituacionMigratoria = "tipo";
+  keywordCondicionMedica = "condicion";
   keywordParentesco = "parentesco";
   pasivos;
   activos;
   existeActivo: boolean;
   existePasivo: boolean;
   cargando: boolean;
+  esRefugiado: boolean;
   logoFnj;
   logoSap;
   idRegistrador: number;
   estadoDiscapacidad = [
-    { id: 1, estado: 'Discapacitado' },
-    { id: 2, estado: 'Enfermo' },
+    { id: 1, estado: 'Discapacidad' },
+    { id: 2, estado: 'Enfermedad' },
     { id: 3, estado: 'Embarazada' },
     { id: 4, estado: 'Lactancia' }
   ]
@@ -63,8 +70,6 @@ export class FormularioIngresoPage implements OnInit {
   @ViewChild('pais') pais;
   @ViewChild('lugarIngreso') lugIng;
   @ViewChild('situacionMigratoria') sitMig;
-  //@ViewChild('profilePic') profilePic:ElementRef;
-
   constructor(
     private alertCtrl: AlertController,
     private router: Router,
@@ -72,14 +77,14 @@ export class FormularioIngresoPage implements OnInit {
     private servicio: DataService,
     private toastCtrl: ToastController,
     private http: HttpClient) {
-    //this.country = new FormControl('ondia');
   }
   ionViewWillLeave() {
-    if (this.editandoUsuario) {
+    if (this.editando) {
       this.cancelarEdicion();
     }
   }
   ionViewWillEnter() {
+    this.ionContent.scrollToTop();
     this.logos();
     var reg = localStorage.getItem('idusuario');
     this.idRegistrador = JSON.parse(reg);
@@ -89,7 +94,6 @@ export class FormularioIngresoPage implements OnInit {
     this.lugaresIngreso();
     this.nacionalidades();
     this.usuariosActivos();
-    this.logos();
     var x = localStorage.getItem('editarUsuario');
     this.editandoUsuario = JSON.parse(x);
     if (this.editandoUsuario) {
@@ -104,12 +108,13 @@ export class FormularioIngresoPage implements OnInit {
     }
   }
   ionViewDidEnter() {
-    //this.nac.initialValue = 'nacc';
-    this.nac.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idnacionalidad.gentilicio;
-    this.ciu.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idciudad.ciudad;
-    this.pais.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idpais.pais;
-    this.lugIng.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idlugarIngreso.nombre;
-    this.sitMig.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].situacionMigratoria;
+    if (this.editando) {
+      this.nac.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idnacionalidad.gentilicio;
+      this.ciu.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idciudad.ciudad;
+      this.pais.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idpais.pais;
+      this.lugIng.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].idlugarIngreso.nombre;
+      this.sitMig.searchInput.nativeElement.value = this.editandoUsuario.nuevoUsuario[0].situacionMigratoria;
+    }
   }
   ngOnInit() {
     this.existeActivo = false;
@@ -119,8 +124,7 @@ export class FormularioIngresoPage implements OnInit {
 
   }
   logos() {
-    //logo24M
-    this.http.get('./assets/imagenesFundacion/fnjLogo.jpg', { responseType: 'blob' })
+    this.http.get('./assets/imagenesFundacion/fnjLogo1.jpg', { responseType: 'blob' })
       .subscribe(res => {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -129,7 +133,7 @@ export class FormularioIngresoPage implements OnInit {
         }
         reader.readAsDataURL(res);
       })
-    this.http.get('./assets/imagenesFundacion/sapLogo.jpg', { responseType: 'blob' })
+    this.http.get('./assets/imagenesFundacion/sapLogo.jpeg', { responseType: 'blob' })
       .subscribe(res => {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -228,7 +232,12 @@ export class FormularioIngresoPage implements OnInit {
   }
   selectFechaNacimiento(item, index) {
     let fechaNacimiento = item;
-    //console.log(item, index);
+    var fNacimiento = new Date(fechaNacimiento).getTime();
+    var fHoy = new Date().getTime();
+    var diferencia = fHoy - fNacimiento;
+    var edad = diferencia / (1000 * 60 * 60 * 24);
+    edad = Math.floor(edad / 365);
+    console.log(edad);
     for (const key in this.nuevoInforme) {
       if (Object.prototype.hasOwnProperty.call(this.nuevoInforme, key)) {
         const element = this.nuevoInforme[key];
@@ -236,12 +245,12 @@ export class FormularioIngresoPage implements OnInit {
           const e = element[i];
           if (i == index) {
             element[i].fechaNacimiento = fechaNacimiento;
+            element[i].edad = edad;
             //console.log('e_: ', e);
           }
         }
       }
     }
-
   }
   selectPais(item, index) {
     let idpais = item.idpais;
@@ -321,8 +330,15 @@ export class FormularioIngresoPage implements OnInit {
     }
   }
   selectSituacionMigratoria(item, index) {
+    this.esRefugiado = false;
     let idsituacionMigratoria = item.tipo;
-    console.log(item)
+    var refugiado = idsituacionMigratoria.includes('Refugiado');
+    if (refugiado) {
+      this.esRefugiado = true;
+      this.notificarRefugiado();
+      this.nuevoInforme.nuevoUsuario[index].foto = null;
+      //console.log(this.nuevoInforme);
+    }
     for (const key in this.nuevoInforme) {
       if (Object.prototype.hasOwnProperty.call(this.nuevoInforme, key)) {
         const element = this.nuevoInforme[key];
@@ -334,6 +350,17 @@ export class FormularioIngresoPage implements OnInit {
         }
       }
     }
+  }
+  selectCondicionMedica(item, index, ind) {
+    var condicionMedica = item.condicion;
+    for (let i = 0; i < this.nuevoInforme.nuevoUsuario.length; i++) {
+      for (let s = 0; s < this.nuevoInforme.nuevoUsuario[i].salud.length; s++) {
+        if (i == index && s == ind) {
+          this.nuevoInforme.nuevoUsuario[i].salud[s].condicionMedica = condicionMedica;
+        }
+      }
+    }
+    console.log(this.nuevoInforme);
   }
   usuariosActivos() {
     this.activos = [];
@@ -369,6 +396,7 @@ export class FormularioIngresoPage implements OnInit {
     this.servicio.getLugaresIngreso()
       .subscribe((lugares) => {
         this.listaLugarIngreso = lugares;
+        console.log(this.listaLugarIngreso);
       });
   }
   editarUsuario() {
@@ -392,16 +420,23 @@ export class FormularioIngresoPage implements OnInit {
     user.idRegistrador = this.idRegistrador;
     user.tipoIdentificacion = parseInt(this.nuevoInforme.nuevoUsuario[0].tipoIdentificacion);
     user.idgenero = parseInt(this.nuevoInforme.nuevoUsuario[0].idgenero);
-    console.log(user);
+    //console.log(user);
     if (user.nombres) {
       this.servicio.editarUsuario(user).subscribe((res) => {
         if (res) {
-          console.log(res, 'Registrado con Éxito!!');
+          //console.log(res, 'Registrado con Éxito!!');
+          localStorage.removeItem('editarUsuario');
+          //this.editandoUsuario = new NuevoUsuario();
           this.successAlert();
           this.cargando = false;
+          this.editando = false;
+          this.existeActivo = false;
+          this.existePasivo = false;
+          this.count = 0;
+          this.nuevoInforme = new InformeIngreso();
           setTimeout(() => {
-            this.ngOnInit();
-          }, 1500);
+            this.router.navigate(['usuarios']);
+          }, 3000);
         }
       },
         (err) => {
@@ -437,8 +472,12 @@ export class FormularioIngresoPage implements OnInit {
       user.idParentesco = this.nuevoInforme.nuevoUsuario[i].idParentesco;
       user.nombres = this.nuevoInforme.nuevoUsuario[i].nombres;
       user.apellidos = this.nuevoInforme.nuevoUsuario[i].apellidos;
-      user.telefono = this.nuevoInforme.nuevoUsuario[i].telefono.toString();
-      user.telefonoContacto = this.nuevoInforme.nuevoUsuario[i].telefonoContacto.toString();
+      if (user.telefono) {
+        user.telefono = this.nuevoInforme.nuevoUsuario[i].telefono.toString();
+      }
+      if (user.telefonoContacto) {
+        user.telefonoContacto = this.nuevoInforme.nuevoUsuario[i].telefonoContacto.toString();
+      }
       user.fechaIngresoEcuador = this.nuevoInforme.nuevoUsuario[i].fechaIngresoEcuador;
       user.fechaIngresoFundacion = this.nuevoInforme.nuevoUsuario[i].fechaIngresoFundacion;
       user.fechaNacimiento = this.nuevoInforme.nuevoUsuario[i].fechaNacimiento;
@@ -457,6 +496,15 @@ export class FormularioIngresoPage implements OnInit {
       user.tipoIdentificacion = parseInt(this.nuevoInforme.nuevoUsuario[i].tipoIdentificacion);
       user.foto = this.nuevoInforme.nuevoUsuario[i].foto;
       registros.push(user);
+
+
+      //for (let r = 0; r < registros.length; r++) {
+      //console.log('for_registro_exitoso_: ', registros[r]);
+      const documentDefinition = this.getDocumentDefinition(user);
+      pdfMake.createPdf(documentDefinition).download('FNJ_' + user.identificacion);
+      //}
+
+
       //console.log('Registros[]_: ', registros);
       if (user.nombres && user.apellidos && user.fechaIngresoEcuador && user.fechaIngresoFundacion && user.fechaNacimiento
         && user.habilidades && user.idciudad && user.idgenero && user.idnacionalidad && user.idpais && user.identificacion
@@ -729,6 +777,15 @@ export class FormularioIngresoPage implements OnInit {
     });
     toast.present();
   }
+  async notificarRefugiado() {
+    Swal.fire({
+      icon: 'warning',
+      title: '¡Foto de Perfil Eliminada!',
+      text: 'Refugiados no pueden tener foto de perfil',
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
   async notificarError() {
     const toast = await this.toastCtrl.create({
       message: 'Debes llenar todos los campos',
@@ -761,116 +818,259 @@ export class FormularioIngresoPage implements OnInit {
   getDocumentDefinition(user) {
     //sessionStorage.setItem('acta', JSON.stringify(this.acta));
     return {
+
       content: [
+        //{text: 'noBorders:', fontSize: 14, bold: true, pageBreak: 'after', margin: [0, 0, 0, 8]},
         {
-          columns: [
-            [{
-              image: this.logoFnj,
-              width: 100,
-              height: 75,
-              style: 'img',
-              alignment: 'left'
-            }],
-            [{
-              image: this.logoSap,
-              width: 100,
-              height: 75,
-              style: 'img',
-              alignment: 'left'
-            }]
-          ]
+          style: 'tableExample',
+          alignment: 'center',
+          table: {
+            headerRows: 1,
+            widths: ['auto', 320, 'auto'],
+            body: [
+              [
+                {
+                  image: this.logoSap,
+                  width: 70
+                },
+                { text: 'Fundación Nuestros Jóvenes\nCASA DE ACOGIDA TEMPORAL\n SAN ANTONIO DE PICHINCHA', style: 'tableTitle' },
+                {
+                  image: this.logoFnj,
+                  width: 85
+                }
+              ]
+            ]
+          },
+          layout: 'noBorders'
         },
         {
-          text: 'Fundacion Nuestros Jóvenes',
-          style: 'titulo'
-        },
-        {
-          canvas: [{ type: 'line', x1: 0, y1: 3, x2: 590 - 2 * 30, y2: 3, lineWidth: 3 }]
-        },
+          style: 'tableExample',
+          color: '#444',
+          table: {
+            widths: [220, '*', '*'],
+            headerRows: 2,
+            // keepWithHeaderRows: 1,
+            body: [
+              [{ text: 'FECHA DE INGRESO AL ALBERGUE\n28/07/2020', style: 'tableInsideHeader', colSpan: 0 },
+              { text: 'Nombres y Apellidos\nKevin Nicolay Cevallos Gaibor', style: 'tableInsideHeader', colSpan: 2 },
+              {}],
 
+              [{ text: 'Género:\nMasculino', style: 'tableInsideHeader' },
+              { text: 'Documento de Identidad:\n.-1725348708', style: 'tableInsideHeader', colSpan: 1 },
+              { text: 'Tipo de Documento:\nCédula', style: 'tableInsideHeader' }],
 
-        {
-          text: 'Nombres: ' + user.nombres,
-          style: 'titulo'
-        },
-        {
-          text: 'Código usuario',
-          style: 'titulo'
-        },
-        {
-          text: 'Inicio',
-          style: 'body'
-        },
-        {
-          text: 'Orden del Dia',
-          style: 'subTitulo'
-        },
-        {
+              [{ text: 'Nivel de Instrucción:\nBachillerato', style: 'tableInsideHeader' },
+              { text: 'Oficio:\nProfesor', style: 'tableInsideHeader', colSpan: 1 },
+              { text: 'Habilidades:\nCarpintero, Cocinero, Albañil', style: 'tableInsideHeader' }],
 
-        },
-        {
-          text: 'Desarrollo',
-          style: 'subTitulo'
-        },
-        {
-          text: 'this.acta.desarrollo',
-          style: 'body'
-        },
+              [{ text: 'Profesión:\nTecnólogo en Desarrollo de Software', style: 'tableInsideHeader' },
+              { text: 'Nacionalidad\nECUATORIANA', style: 'tableInsideHeader', alignment: 'center' },
+              { text: 'Ciudad\nQUITO', style: 'tableInsideHeader', alignment: 'center' }],
 
-        {
-          text: 'this.acta.despedida',
-          fontSize: 12,
-          margin: [5, 20, 5, 60]
-        },
-        {
-          text: 'this.usuario.name',
-          style: 'pie'
-        },
-        {
-          text: 'this.acta.InstitutoPertenciciente',
-          style: 'pie'
+              [{ text: 'Estado/Provincia\nPICHINCHA', style: 'tableInsideHeader', alignment: 'center' },
+              { text: 'Fecha de Nacimiento\n28/07/1998', style: 'tableInsideHeader', colSpan: 1, alignment: 'center' },
+              { text: 'Edad:\n22 años', style: 'tableInsideHeader', alignment: 'center' }],
+
+              [{ text: 'Último País de Reisdencia:\nCOLOMBIA', style: 'tableInsideHeader', alignment: 'center' },
+              { text: 'Teléfono\n0978857892', style: 'tableInsideHeader', colSpan: 1, alignment: 'center' },
+              { text: 'Teléfono de Contacto:\n0995388241', style: 'tableInsideHeader', alignment: 'center' }],
+
+              [{ text: 'Fecha de Ingreso al Ecuador\n25/07/2020', style: 'tableInsideHeader' },
+              { text: 'Lugar de Ingreso al Ecuador:', style: 'tableInsideHeader' },
+              { text: 'Fecha límite de estadía en Ecuador\n25/08/2020', style: 'tableInsideHeader' }],
+
+              [{ text: 'Situación Migratoria\nSolicitante', style: 'tableInsideHeader' },
+              { text: 'Condición Médica\nEstado: Enfermedad, Descripción: Gripe\nEstado: Discapacidad, Descripción: Discapacidad Visual 30%\nEstado: Enfermedad, Descripción: Tos\nEstado: Embarazada, Descripción: 3 Meses de Embarazo\n', style: 'tableInsideHeader', colSpan: 2, rowSpan: 1 },
+              {}],
+
+              [{ text: 'Observaciones de Ingreso', style: 'tableInsideHeader', alignment: 'center', colSpan: 3 }],
+
+              [{ text: 'Viene Acompañado de 3 Familiares', style: 'textContent', colSpan: 3 }],
+
+              [{ text: 'EGRESO', style: 'header', alignment: 'center', colSpan: 3 }],
+
+              [{ text: 'Día, mes, año y hora:', style: 'tableInsideHeader', colSpan: 1 },
+              { text: 'Firma del Albergado', style: 'tableInsideHeader', alignment: 'center', colSpan: 2 },
+              {}],
+
+              [{ text: 'Motivo del Egreso:', style: 'tableInsideEgreso' },
+              { text: '', style: 'tableInsideHeader', colSpan: 2, rowSpan: 1 },
+              {}],
+
+              [{ text: 'Observaciones:', style: 'tableInsideEgreso', colSpan: 1 },
+              { text: 'Firma del Responsable del CATSAP', style: 'tableInsideHeader', alignment: 'center', colSpan: 2 },
+              {}],
+
+            ]
+          }
         }
+
       ],
-      info: {
-        title: 'FNJ',
-        author: 'this.usuario.name',
-        subject: 'Acta',
-        keywords: 'Acta, ONLINE Acta',
-      },
       styles: {
-        titulo: {
-          fontSize: 14,
+        header: {
+          fontSize: 15,
           bold: true,
-          margin: [0, 20, 0, 20],
-          alignment: 'center',
-          textAlign: 'justify'
+          color: 'black',
+          margin: [0, 0, 0, 0]
         },
-        subTitulo: {
-          fontSize: 13,
+        textContent: {
+          fontSize: 12,
+          bold: false,
+          color: 'black',
+          margin: [0, 0, 0, 10]
+        },
+        subheader: {
+          fontSize: 16,
           bold: true,
-          margin: [5, 10, 5, 10]
+          margin: [0, 10, 0, 5]
         },
-        cabecera: {
-          fontSize: 12,
-          margin: [5, 10, 5, 10],
-          textAlign: 'justify'
-        },
-        body: {
-          fontSize: 12,
-          fontFamily: 'times new roman',
-          margin: [5, 10, 5, 10],
-          textAlign: 'justify'
-        },
-        pie: {
-          fontSize: 12,
-          fontFamily: 'times new roman',
-          margin: [5, 10, 5, 10],
+        tableExample: {
           bold: true,
-          alignment: 'center',
-          textAlign: 'justify'
+          fontSize: 20,
+          margin: [0, 0, 0, 0]
+        },
+        tableHeader: {
+
+          bold: false,
+          fontSize: 22,
+          color: 'black'
+        },
+        tableInsideHeader: {
+
+          bold: true,
+          fontSize: 12,
+          color: 'black'
+        },
+        tableTitle: {
+
+          bold: true,
+          fontSize: 18,
+          color: 'black',
+          margin: [30, 0, 0, 0]
+        },
+        tableInsideEgreso: {
+
+          bold: true,
+          fontSize: 12,
+          color: 'black',
+          margin: [0, 0, 0, 35]
         }
+      },
+      defaultStyle: {
+        color: 'black'
+        //alignment: 'justify'
       }
+      /*  content: [
+         {
+           columns: [
+             [{
+               image: this.logoFnj,
+               width: 100,
+               height: 75,
+               style: 'img',
+               alignment: 'left'
+             }],
+             [{
+               image: this.logoSap,
+               width: 100,
+               height: 75,
+               style: 'img',
+               alignment: 'left'
+             }]
+           ]
+         },
+         {
+           text: 'Fundacion Nuestros Jóvenes',
+           style: 'titulo'
+         },
+         {
+           canvas: [{ type: 'line', x1: 0, y1: 3, x2: 590 - 2 * 30, y2: 3, lineWidth: 3 }]
+         },
+ 
+ 
+         {
+           text: 'Nombres: ' + user.nombres,
+           style: 'titulo'
+         },
+         {
+           text: 'Código usuario',
+           style: 'titulo'
+         },
+         {
+           text: 'Inicio',
+           style: 'body'
+         },
+         {
+           text: 'Orden del Dia',
+           style: 'subTitulo'
+         },
+         {
+ 
+         },
+         {
+           text: 'Desarrollo',
+           style: 'subTitulo'
+         },
+         {
+           text: 'this.acta.desarrollo',
+           style: 'body'
+         },
+ 
+         {
+           text: 'this.acta.despedida',
+           fontSize: 12,
+           margin: [5, 20, 5, 60]
+         },
+         {
+           text: 'this.usuario.name',
+           style: 'pie'
+         },
+         {
+           text: 'this.acta.InstitutoPertenciciente',
+           style: 'pie'
+         }
+       ],
+       info: {
+         title: 'FNJ',
+         author: 'this.usuario.name',
+         subject: 'Acta',
+         keywords: 'Acta, ONLINE Acta',
+       },
+       styles: {
+         titulo: {
+           fontSize: 14,
+           bold: true,
+           margin: [0, 20, 0, 20],
+           alignment: 'center',
+           textAlign: 'justify'
+         },
+         subTitulo: {
+           fontSize: 13,
+           bold: true,
+           margin: [5, 10, 5, 10]
+         },
+         cabecera: {
+           fontSize: 12,
+           margin: [5, 10, 5, 10],
+           textAlign: 'justify'
+         },
+         body: {
+           fontSize: 12,
+           fontFamily: 'times new roman',
+           margin: [5, 10, 5, 10],
+           textAlign: 'justify'
+         },
+         pie: {
+           fontSize: 12,
+           fontFamily: 'times new roman',
+           margin: [5, 10, 5, 10],
+           bold: true,
+           alignment: 'center',
+           textAlign: 'justify'
+         }
+       } */
     };
   }
+
 
 }

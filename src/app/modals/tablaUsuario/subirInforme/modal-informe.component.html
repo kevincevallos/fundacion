@@ -12,12 +12,17 @@
     </ion-row>
   </ion-grid>
 </ion-header>
-
+<ion-item>
+  <ion-label>Informe de Violencia
+  </ion-label>
+  <ion-checkbox value="true" [(ngModel)]="objeto.violencia" color="danger"></ion-checkbox>
+</ion-item>
 <ion-item>
   <ion-label position="stacked">
     <h1><b>Observaciones:</b></h1>
   </ion-label>
-  <ion-textarea name="observaciones" [(ngModel)]="objeto.observacion" rows="3" cols="20" placeholder="Añadir observacioón o detalles..."></ion-textarea>
+  <ion-textarea name="observaciones" [(ngModel)]="objeto.observacion" rows="3" cols="20"
+    placeholder="Añadir observación o detalles..."></ion-textarea>
 </ion-item>
 
 <div mat-dialog-content style="text-align: center;">

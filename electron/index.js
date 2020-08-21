@@ -23,13 +23,21 @@ let useSplashScreen = false;
 // Create simple menu for easy devtools access, and for demo
 const menuTemplateDev = [
   {
-    label: 'Options',
+    label: 'Salir',
     submenu: [
       {
-        label: 'Open Dev Tools',
+        label: 'Salir de FNJ',
         click() {
-          mainWindow.openDevTools();
+          app.quit();
         },
+      },
+    ],
+  },
+  {
+    label: 'Información',
+    submenu: [
+      {
+        label: 'Desarrollado por Yavirac <3'
       },
     ],
   },
@@ -77,10 +85,11 @@ async function createWindow() {
 
   if (isDevMode) {
     // Set our above template to the Menu Object if we are in development mode, dont want users having the devtools.
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateDev));
+
     // If we are developers we might as well open the devtools by default.
     mainWindow.webContents.openDevTools();
   }
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateDev));
 
   if (useSplashScreen) {
     splashScreen = new CapacitorSplashScreen(mainWindow);

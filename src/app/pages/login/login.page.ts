@@ -13,7 +13,8 @@ export class LoginPage implements OnInit {
   private usuario: LoginUser = {
     nombre: '',
     contrasena: '',
-    correo: ''
+    pregunta1: '',
+    pregunta2: ''
   }
   slideOptsFade;
   slideOptsCube;
@@ -21,11 +22,17 @@ export class LoginPage implements OnInit {
   constructor(private servicio: DataService, private router: Router, private toastCtrl: ToastController) { }
 
   ngOnInit() {
+    this.comprobarSesionActual();
     this.fade();
     this.cube();
   }
   ionViewWillEnter() {
     this.cargando = false;
+  }
+  comprobarSesionActual() {
+    if (this.servicio.getUsuarioActual()) {
+      this.router.navigate(['/bienvenido']);
+    }
   }
   fade() {
     this.slideOptsFade = {
@@ -276,7 +283,7 @@ export class LoginPage implements OnInit {
         });
   }
   recuperarContrasena() {
-    console.log(this.usuario.correo);
+    console.log(this.usuario);
     /* this.servicio.recuperarContrasena(this.usuario.nombrePerfil, this.usuario.contrasena).subscribe((res) => {
       console.log('Res_: ', res);
     }); */

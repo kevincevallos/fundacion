@@ -33,16 +33,16 @@
                 <ion-col>
                   <div class="form-group">
                     <ion-label>Nombres:</ion-label>
-                    <ion-input [(ngModel)]="s.nombres" (ngModelChange)="capitalize($event)" name="nombres" id="clave"
-                      placeholder="Nombres completos" type="text" required>
+                    <ion-input [readonly]="editando" [(ngModel)]="s.nombres" (ngModelChange)="capitalize($event)"
+                      name="nombres" id="clave" placeholder="Nombres completos" type="text" required>
                     </ion-input>
                   </div>
                 </ion-col>
                 <ion-col>
                   <div class="form-group">
                     <ion-label>Apellidos:</ion-label>
-                    <ion-input [(ngModel)]="s.apellidos" name="apellidos" id="clave" placeholder="Apellidos completos"
-                      type="text" required>
+                    <ion-input [readonly]="editando" [(ngModel)]="s.apellidos" name="apellidos" id="clave"
+                      placeholder="Apellidos completos" type="text" required>
                     </ion-input>
                   </div>
                 </ion-col>
@@ -78,8 +78,9 @@
                     <ion-text *ngIf="existePasivo" style="color: red;">Albergado consta en el sistema
                       <ion-button fill="clear" (click)="activarPasivo(s.identificacion)"><a>Activar?</a></ion-button>
                     </ion-text>
-                    <ion-input [(ngModel)]="s.identificacion" (ionChange)="comprobarCedulaExistente($event)"
-                      name="identificacion" id="clave" placeholder="Número de Identificación" required>
+                    <ion-input [readonly]="editando" [(ngModel)]="s.identificacion"
+                      (ionChange)="comprobarCedulaExistente($event)" name="identificacion" id="clave"
+                      placeholder="Número de Identificación" required>
                     </ion-input>
                     <ion-radio-group name="tipoDocumento" [(ngModel)]="s.tipoIdentificacion" value="genero">
                       <ion-row>
@@ -107,15 +108,15 @@
                   <div *ngIf="count>0" class="form-group">
                     <ion-label>Parentesco Familiar:</ion-label>
                     <ng-autocomplete [data]="listaParentescos" [searchKeyword]="keywordParentesco"
-                      (selected)='selectParentesco($event,i)' [itemTemplate]="itemTemplate6">
+                      (selected)='selectParentesco($event,i)' [itemTemplate]="itemTemplate">
                     </ng-autocomplete>
-                    <ng-template #itemTemplate6 let-item>
+                    <ng-template #itemTemplate let-item>
                       <a [innerHTML]="item.parentesco"></a>
                     </ng-template>
                   </div>
                 </ion-col>
                 <ion-col>
-                  <div class="form-group">
+                  <div class="form-group" [hidden]="esRefugiado">
                     <ion-label>Fotografía:</ion-label>
                     <ion-row>
                       <img src="{{s.foto}}" id="profilePic" />
@@ -164,9 +165,9 @@
                 <ion-col>
                   <ion-label>Nacionalidad:</ion-label>
                   <ng-autocomplete [data]="listaNacionalidades" [searchKeyword]="keywordNacionalidad"
-                    (selected)='selectNacionalidad($event,i)' #nacionalidad [itemTemplate]="itemTemplate">
+                    (selected)='selectNacionalidad($event,i)' #nacionalidad [itemTemplate]="itemTemplate1">
                   </ng-autocomplete>
-                  <ng-template #itemTemplate let-item>
+                  <ng-template #itemTemplate1 let-item>
                     <a [innerHTML]="item.gentilicio"></a>
                   </ng-template>
                 </ion-col>
@@ -174,9 +175,9 @@
                   <ion-label>Ciudad:</ion-label>
                   <ng-autocomplete [data]="listaCiudades" [searchKeyword]="keywordCiudad" #ciudad
                     (selected)='selectCiudad($event,i)' (change)="agregarNuevaCiudad($event, i)"
-                    [itemTemplate]="itemTemplate7">
+                    [itemTemplate]="itemTemplate2">
                   </ng-autocomplete>
-                  <ng-template #itemTemplate7 let-item>
+                  <ng-template #itemTemplate2 let-item>
                     <a [innerHTML]="item.ciudad"></a>
                   </ng-template>
                 </ion-col>
@@ -199,8 +200,8 @@
                   </div>
                 </ion-col>
                 <ion-col>
-                  <div style="margin-top: 10px;" class="form-group">
-                    <h4><b>{{ s.nombres }} {{ s.apellidos }} tiene <u>25</u> años</b></h4>
+                  <div *ngIf="s.edad" style="margin-top: 10px;" class="form-group">
+                    <h4><b>{{ s.nombres }} {{ s.apellidos }} tiene <u>{{ s.edad }}</u> años</b></h4>
                   </div>
                 </ion-col>
               </ion-row>
@@ -241,9 +242,9 @@
                 <a [innerHTML]="item.tipo"></a>
               </ng-template>
               <ion-label>Observaciones de Ingreso:</ion-label>
-              <ion-input [(ngModel)]="s.observacionIngreso" name="observacionIngreso" id="clave"
+              <ion-textarea rows="6" [(ngModel)]="s.observacionIngreso" name="observacionIngreso" id="clave"
                 placeholder="Agregar observaciones de ingreso" type="text">
-              </ion-input>
+              </ion-textarea>
             </ion-grid>
           </ion-card-content>
         </ion-card>
@@ -256,9 +257,12 @@
               <ion-row>
                 <ion-col>
                   <ion-label><b>Condición Médica Nro.{{in+1}}:</b></ion-label>
-                  <ion-input [(ngModel)]="cd.condicionMedica" name="condicionMedica" id="clave"
-                    placeholder="Describa su condición médica" type="text" required>
-                  </ion-input>
+                  <ng-autocomplete [data]="listaCondicionMedica" [searchKeyword]="keywordCondicionMedica"
+                    (selected)='selectCondicionMedica($event,i,in)' #condicionMedica [itemTemplate]="itemTemplate6">
+                  </ng-autocomplete>
+                  <ng-template #itemTemplate6 let-item>
+                    <a [innerHTML]="item.condicion"></a>
+                  </ng-template>
                 </ion-col>
                 <ion-col>
                   <ion-label>Estado de Discapacidad:</ion-label>

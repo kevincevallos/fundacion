@@ -19,6 +19,7 @@ import { FormsModule, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule, MatInput } from '@angular/material/input';
 
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [AppComponent, ModalComponent, ModalInformeComponent, ModalEgresoComponent],
   entryComponents: [ModalComponent, ModalInformeComponent, ModalEgresoComponent],
@@ -30,6 +31,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
     FormsModule,
     MatAutocompleteModule,
     MatInputModule,
+    MatTooltipModule,
     BrowserAnimationsModule
   ],
   providers: [

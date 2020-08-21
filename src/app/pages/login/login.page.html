@@ -1,17 +1,17 @@
 <ion-content fullscreen>
   <ion-slides id="slidesLogin" class="swiper-no-swiping" pager="false" [options]="slideOptsFade">
     <ion-slide>
-      <ion-img src="./assets/imagenesFundacion/fnjLogo.jpg"></ion-img>
+      <ion-img style="width: 350px;background-color: white;" src="./assets/imagenesFundacion/fnjLogo.jpeg"></ion-img>
     </ion-slide>
     <ion-slide>
-      <ion-img src="./assets/imagenesFundacion/sapLogo.jpg"></ion-img>
+      <ion-img style="height: 200px;background-color: white;" src="./assets/imagenesFundacion/sapLogo.jpeg"></ion-img>
     </ion-slide>
   </ion-slides>
 
 
   <ion-card class="loginCard">
     <ion-slides class="swiper-no-swiping" #slides [options]="slideOptsCube">
-      <ion-slide style="background-color: white;">
+      <ion-slide style="background-color: aliceblue;">
         <form (ngSubmit)="iniciarSesion()">
           <ion-card-header>
             <h1>Iniciar Sesión</h1>
@@ -47,7 +47,13 @@
             <h1>Recuperar Contraseña</h1>
           </ion-card-header>
           <ion-item lines="full">
-            <ion-input type="text" name="correo" [(ngModel)]="usuario.correo" placeholder="Correo electrónico"
+            <ion-label position="floating">¿Cuál es el nombre de tu abuela?</ion-label>
+            <ion-input type="text" name="pregunta1" [(ngModel)]="usuario.pregunta1"
+              required></ion-input>
+          </ion-item>
+          <ion-item lines="full">
+            <ion-label position="floating">¿Cuál es el nombre de tu mascota?</ion-label>
+            <ion-input type="text" name="pregunta2" [(ngModel)]="usuario.pregunta2"
               required></ion-input>
           </ion-item>
           <ion-row>

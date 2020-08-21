@@ -16,6 +16,9 @@ export class DataService {
   getUsuarios() {
     return this.http.get(this.url + '/usuario_recurso/obtener_usuarios');
   }
+  getUsuariosPasivos() {
+    return this.http.get(this.url + '/usuario_recurso/obtener_usuarios');
+  }
   getNacionalidades() {
     return this.http.get(this.url + '/usuario_recurso/obtener_nacionalidades');
   }

@@ -24,6 +24,12 @@
     <ion-segment-button value="Especiales">
       <ion-label>Necesidades Especiales</ion-label>
     </ion-segment-button>
+    <ion-segment-button value="Refugiados">
+      <ion-label>Refugiados</ion-label>
+    </ion-segment-button>
+    <ion-segment-button style="background-color: rgba(252, 58, 100, 0.541); color: red;" value="EstadoAlerta">
+      <ion-label>Estado de Alerta</ion-label>
+    </ion-segment-button>
     <ion-segment-button value="IngresosEgresos">
       <ion-label>Ingresos y Egresos</ion-label>
     </ion-segment-button>
@@ -32,30 +38,54 @@
 
     <ion-card [hidden]="!genero">
       <ion-card-content>
-        <canvas #barCanvas></canvas>
+        <canvas #barCanvasGenero></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card [hidden]="!genero">
+      <ion-card-content>
+        <canvas #barCanvasGlbti></canvas>
       </ion-card-content>
     </ion-card>
 
     <ion-card [hidden]="!edad">
       <ion-card-content>
-        <canvas #barCanvas2></canvas>
+        <canvas #barCanvasEdad></canvas>
       </ion-card-content>
     </ion-card>
 
     <ion-card [hidden]="!especiales">
-      <ion-card-header>
-        <ion-title><b>Total de personas con necedidades especiales: {{chombresNecEsp+cmujeresNecEsp}}</b></ion-title>
-      </ion-card-header>
       <ion-card-content>
         <canvas #necEsp></canvas>
       </ion-card-content>
     </ion-card>
 
-    <ion-card [hidden]="!ingresosEgresos">
+    <ion-card [hidden]="!ingresos">
+      <ion-card-header>
+        <ion-item>
+        <ion-label position="stacked" color="primary">Filtrar Ingresos y Egresos por Año:</ion-label>
+        <ion-datetime displayFormat="YYYY" pickerFormat="YYYY" name="filtrarAnio" [value]="fechaActual"
+        [(ngModel)]="anioActual" display-timezone="utc" (ionChange)="filtrarIngresosEgresos($event.target.value)">
+        </ion-datetime>
+        </ion-item>
+      </ion-card-header>
       <ion-card-content>
-        <canvas #lineCanvas></canvas>
+        <canvas #ingresosEgresos></canvas>
       </ion-card-content>
     </ion-card>
+
+    <ion-card id="refug" [hidden]="!refugiados">
+      <ion-card-content>
+        <canvas #canvasRefugiados></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card id="alerta" [hidden]="!eAlerta">
+      <ion-card-content>
+        <canvas #estadoAlerta></canvas>
+      </ion-card-content>
+    </ion-card>
+
 
   </div>
 </ion-content>

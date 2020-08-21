@@ -1,5 +1,6 @@
 export class LoginUser {
     nombre: string;
     contrasena: string;
-    correo;
+    pregunta1: string;
+    pregunta2: string;
 }

@@ -10,10 +10,12 @@ import Swal from 'sweetalert2';
   styleUrls: ['./modal-informe.component.css']
 })
 export class ModalInformeComponent implements OnInit {
+  
   objeto = {
     idUsuario:0,
     observacion:'',
     documento:'',
+    violencia:false,
     estado:false
   }
   datosSalud;

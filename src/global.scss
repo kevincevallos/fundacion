@@ -37,10 +37,17 @@ ion-title {
 
 #logoFNJ {
       height: 55px;
-      content: url('src/assets/imagenesFundacion/fnjLogo.jpg');
+      content: url('src/assets/imagenesFundacion/fnjLogo.jpeg');
   }
   .modals {
     mat-dialog-container {
+      background-color: lightblue;
+      color: black;
+    }
+  }
+  .modalInfo {
+    mat-dialog-container {
+      width: 100%;
       background-color: lightblue;
       color: black;
     }

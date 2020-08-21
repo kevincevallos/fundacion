@@ -16,7 +16,7 @@
 
 <ion-content>
   <div class="example-container mat-elevation-z8">
-    <mat-form-field style="background-color: lightskyblue;" id="inputFilter">
+    <mat-form-field matTooltip="TABLA DE USUARIOS ACTIVOS" style="background-color: lightskyblue;" id="inputFilter">
       <input matInput (keyup)="applyFilter($event.target.value)"
         placeholder="Filtrar por nombres, apellidos, identificación, ciudad">
     </mat-form-field>
@@ -75,5 +75,61 @@
     </mat-table>
 
     <mat-paginator style="background-color: lightskyblue;color: black;" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+  <br>
+  <!--Tabla Pasivos-->
+  <div class="example-container mat-elevation-z8">
+    <mat-form-field matTooltip="TABLA DE USUARIOS PASIVOS" style="background-color: pink;" id="inputFilter">
+      <input matInput (keyup)="applyFilterPasivos($event.target.value)"
+        placeholder="Filtrar por nombres, apellidos, identificación, ciudad">
+    </mat-form-field>
+    <mat-table style="background-color: pink;" [dataSource]="dataSourcePasivos" matSort>
+
+      <ng-container matColumnDef="nombres">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> NOMBRES </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.nombres}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="apellidos">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> APELLIDOS </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.apellidos}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="identificacion">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> IDENTIFICACIÓN </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.identificacion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ciudad">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> CIUDAD </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.ciudad}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="telefono">
+        <mat-header-cell id="headers" *matHeaderCellDef mat-sort-header> TELÉFONO </mat-header-cell>
+        <mat-cell id="headers" *matCellDef="let row"> {{row.telefono}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ver">
+        <mat-header-cell id="headers" *matHeaderCellDef> VER </mat-header-cell>
+        <mat-cell id="icons" *matCellDef="let row">
+          <ion-icon color="danger" style="font-size: 2em;" name="eye" (click)="verInfo(row)" mat-button
+            matTooltip="Visualizar Información" matTooltipPosition="below"></ion-icon>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="informe">
+        <mat-header-cell id="headers" *matHeaderCellDef> SUBIR INFORME </mat-header-cell>
+        <mat-cell id="icons" *matCellDef="let row">
+          <ion-icon color="danger" style="font-size: 2em;" (click)="subirInforme(row)" mat-button matTooltip="Subir Informe"
+            matTooltipPosition="below" name="cloud-upload"></ion-icon>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumnsPasivos"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumnsPasivos;">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator style="background-color: pink;color: black;" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
 </ion-content>

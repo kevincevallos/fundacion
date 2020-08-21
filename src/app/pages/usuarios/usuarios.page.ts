@@ -14,6 +14,7 @@ import { InformeIngreso } from 'src/app/models/informeIngreso.model';
 import { AppComponent } from 'src/app/app.component';
 
 const ELEMENT_DATA: Usuario[] = [];
+const ELEMENT_DATA_PASIVOS: Usuario[] = [];
 
 @Component({
   selector: 'app-usuarios',
@@ -26,7 +27,9 @@ export class UsuariosPage implements OnInit {
   datosSalud;
   cargando: boolean = true;
   displayedColumns = ['nombres', 'apellidos', 'identificacion', 'ciudad', 'telefono', 'ver', 'editar', 'informe'];
+  displayedColumnsPasivos = ['nombres', 'apellidos', 'identificacion', 'ciudad', 'telefono', 'ver', 'informe'];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
+  dataSourcePasivos = new MatTableDataSource(ELEMENT_DATA_PASIVOS);
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -45,6 +48,7 @@ export class UsuariosPage implements OnInit {
     } */
   ionViewWillEnter() {
     this.llenarTabla();
+    this.llenarTablaPasivos();
     this.editandoUsuario = new InformeIngreso();
   }
   ngOnInit() {
@@ -53,6 +57,11 @@ export class UsuariosPage implements OnInit {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+  applyFilterPasivos(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSourcePasivos.filter = filterValue;
   }
   llenarTabla() {
     const ELEMENT_DATA: Usuario[] = [];
@@ -77,11 +86,35 @@ export class UsuariosPage implements OnInit {
       this.cargando = false;
     }, 3000);
   }
+  llenarTablaPasivos() {
+    const ELEMENT_DATA_PASIVOS: Usuario[] = [];
+    //Llenar tabla de usuarios
+    //console.log('LLENAR_TABLA()');
+    this.servicio.getUsuariosPasivos().subscribe(response => {
+      var n: number = 0, key;
+      //console.log('esto es n_: ',n)
+      for (key in response) {
+        if (response.hasOwnProperty(key))
+          n++;
+      }
+      for (let i = 0; i <= n - 1; i++) {
+        var ciud = response[i].idciudad.ciudad;
+        response[i].ciudad = ciud;
+        ELEMENT_DATA_PASIVOS.push(response[i]);
+      }
+      //this.loading = false;
+      this.dataSourcePasivos.data = ELEMENT_DATA_PASIVOS;
+    });
+    setTimeout(() => {
+      this.cargando = false;
+    }, 3000);
+  }
   verInfo(obj) {
     const dialogRef = this.dialog.open(ModalComponent, {
-      width: '350px',
+      width: '550px',
+      height: '100%',
       data: obj,
-      panelClass: 'modals'
+      panelClass: 'modalInfo'
     });
   }
   subirInforme(obj) {
@@ -132,7 +165,7 @@ export class UsuariosPage implements OnInit {
               //image64 = new String(obj.foto);
               //console.log('image_: ', image64);
               //var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(image64)));
-              this.editandoUsuario.nuevoUsuario[i].foto = 'data:image/png;base64,'+obj.foto;
+              this.editandoUsuario.nuevoUsuario[i].foto = obj.foto;
               //console.log('base64String', this.editandoUsuario.nuevoUsuario[i].foto);
               var genero = obj.idgenero.idgenero;
               this.editandoUsuario.nuevoUsuario[i].idgenero = genero.toString();
@@ -155,7 +188,6 @@ export class UsuariosPage implements OnInit {
     });
     (await alert).present();
   }
-
   home() {
     this.router.navigate(['bienvenido']);
   }
